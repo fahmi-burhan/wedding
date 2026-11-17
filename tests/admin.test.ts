@@ -50,6 +50,32 @@ test('permintaan dari situs lain (Origin berbeda) ditolak', async () => {
   assert.equal(res.status, 403);
 });
 
+test('Origin = domain resmi (PUBLIC_BASE_URL) atau X-Forwarded-Host diterima walau Host ditulis ulang proxy', async () => {
+  const { app } = makeApp();
+  // Panel hosting/proxy mengganti Host menjadi 127.0.0.1:4234, browser tetap mengirim Origin domain resmi.
+  const viaPublic = await request(app)
+    .post('/api/admin/login')
+    .set('Host', '127.0.0.1:4234')
+    .set('Origin', 'https://undangan.contoh.test')
+    .send({ password: ADMIN_PASSWORD });
+  assert.equal(viaPublic.status, 200);
+  // Vite dev (changeOrigin) — Origin localhost:5173 dikenali lewat X-Forwarded-Host.
+  const viaForwarded = await request(app)
+    .post('/api/admin/login')
+    .set('Host', '127.0.0.1:4234')
+    .set('X-Forwarded-Host', 'localhost:5173')
+    .set('Origin', 'http://localhost:5173')
+    .send({ password: ADMIN_PASSWORD });
+  assert.equal(viaForwarded.status, 200);
+  // Situs lain tetap ditolak.
+  const evil = await request(app)
+    .post('/api/admin/login')
+    .set('Host', '127.0.0.1:4234')
+    .set('Origin', 'https://jahat.example')
+    .send({ password: ADMIN_PASSWORD });
+  assert.equal(evil.status, 403);
+});
+
 test('sesi kedaluwarsa setelah 8 jam', async () => {
   const { app, clock } = makeApp();
   const agent = await login(app);

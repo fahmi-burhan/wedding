@@ -57,7 +57,9 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true, // bisa dibuka dari ponsel di Wi-Fi yang sama
       port: 5173,
-      proxy: { '/api': `http://127.0.0.1:${apiPort}` },
+      // changeOrigin:false → header Host asli (localhost:5173) diteruskan apa adanya. Bentuk string singkat
+      // memakai changeOrigin:true, yang membuat Host ≠ Origin sehingga login admin ditolak (cek CSRF).
+      proxy: { '/api': { target: `http://127.0.0.1:${apiPort}`, changeOrigin: false } },
       fs: { allow: [rootDir] }, // izinkan impor config/ & shared/ di luar folder web
     },
     build: {

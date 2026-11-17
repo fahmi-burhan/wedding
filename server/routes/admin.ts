@@ -59,7 +59,7 @@ interface AdminRsvpRow {
 
 export function adminRouter(db: DB, now: () => number, opts: AdminOptions): Router {
   const router = Router();
-  router.use(sameOriginOnly);
+  router.use(sameOriginOnly(opts.publicBaseUrl));
 
   const setSessionCookie = (res: Response, token: string, maxAge: number) =>
     res.cookie(SESSION_COOKIE, token, {

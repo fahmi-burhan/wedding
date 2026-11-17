@@ -70,21 +70,36 @@ export function securityHeaders(_req: Request, res: Response, next: NextFunction
 /**
  * Tolak request yang mengubah data (POST/PATCH/DELETE) bila header Origin berasal dari situs lain.
  * Bersama cookie SameSite=Strict, ini menutup celah CSRF pada panel admin.
+ *
+ * Origin dianggap "situs sendiri" bila host-nya sama dengan salah satu:
+ *   - header Host yang diterima server,
+ *   - header X-Forwarded-Host (proxy/panel hosting yang menulis ulang Host),
+ *   - host dari PUBLIC_BASE_URL (domain resmi undangan).
+ * Situs lain tidak bisa memalsukan Origin maupun X-Forwarded-Host dari browser korban.
  */
-export function sameOriginOnly(req: Request, res: Response, next: NextFunction) {
-  if (req.method === 'GET' || req.method === 'HEAD') return next();
-  const origin = req.headers.origin;
-  if (origin) {
+export function sameOriginOnly(publicBaseUrl: string) {
+  let publicHost = '';
+  try {
+    publicHost = publicBaseUrl ? new URL(publicBaseUrl).host : '';
+  } catch {
+    publicHost = '';
+  }
+  return function sameOriginMiddleware(req: Request, res: Response, next: NextFunction) {
+    if (req.method === 'GET' || req.method === 'HEAD') return next();
+    const origin = req.headers.origin;
+    if (!origin) return next(); // request non-browser (curl) / browser lama: dilindungi SameSite cookie
     let originHost = '';
     try {
       originHost = new URL(origin).host;
     } catch {
       /* origin rusak → dianggap beda situs */
     }
-    if (originHost !== req.headers.host) {
-      res.status(403).json({ ok: false, error: 'Permintaan ditolak.' });
+    const forwarded = String(req.headers['x-forwarded-host'] ?? '').split(',')[0].trim();
+    const allowed = [req.headers.host, forwarded, publicHost].filter(Boolean);
+    if (!originHost || !allowed.includes(originHost)) {
+      res.status(403).json({ ok: false, error: 'Permintaan ditolak (alamat situs tidak dikenali). Buka panel admin dari alamat undangan resmi.' });
       return;
     }
-  }
-  next();
+    next();
+  };
 }
