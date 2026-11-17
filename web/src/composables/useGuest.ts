@@ -42,7 +42,9 @@ export async function loadGuest(): Promise<void> {
   const params = new URLSearchParams(window.location.search);
   guest.name = cleanName(params.get('to') ?? '');
 
-  const raw = (params.get('g') ?? '').trim().toUpperCase();
+  // Kode tamu bisa dari tautan pendek /u/KODE atau dari tautan lama ?g=KODE.
+  const fromPath = window.location.pathname.match(/^\/u\/([A-Za-z0-9]{6,12})\/?$/)?.[1];
+  const raw = (fromPath ?? params.get('g') ?? '').trim().toUpperCase();
   if (!/^[A-Z0-9]{6,12}$/.test(raw)) return;
   try {
     const data = await api<{ guest: { name: string; maxPax: number }; rsvp: RsvpSummary | null }>(

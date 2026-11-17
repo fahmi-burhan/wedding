@@ -117,7 +117,7 @@ test('daftar tamu menyertakan tautan personal berbasis PUBLIC_BASE_URL', async (
   db.prepare("INSERT INTO guests (code, name, max_pax) VALUES ('ABCDEF23', 'Ustadz Fulan', 2)").run();
   const agent = await login(app);
   const [g] = (await agent.get('/api/admin/guests')).body.items;
-  assert.equal(g.link, 'https://undangan.contoh.test/?to=Ustadz%20Fulan&g=ABCDEF23');
+  assert.equal(g.link, 'https://undangan.contoh.test/u/ABCDEF23');
   assert.match(g.whatsappText, /Kepada Yth\. Ustadz Fulan/);
 });
 

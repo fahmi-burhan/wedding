@@ -4,20 +4,15 @@
  * Dipanggil oleh: server/routes/admin.ts (daftar tamu di panel), scripts/guest-links.ts (berkas CSV).
  * Memanggil: config/event.ts.
  *
- * Bentuk tautan: https://domain/?to=Nama%20Tamu&g=KODE
- * - `to`  → nama langsung tampil di sampul (tanpa menunggu server).
- * - `g`   → kode tamu: server memakai ini untuk kuota orang & agar RSVP ulang memperbarui data lama.
+ * Bentuk tautan: https://domain/u/KODE
+ * KODE → server mencari nama & kuota tamu, dan membuat RSVP ulang memperbarui data lama.
+ * Tautan lama bentuk ?to=Nama&g=KODE tetap berfungsi.
  */
 import { event } from '../../config/event.ts';
 
 export function guestLink(baseUrl: string, guest: { name: string; code: string }): string {
-  const url = new URL(baseUrl || 'http://localhost:3000');
-  url.pathname = '/';
-  url.search = '';
-  url.searchParams.set('to', guest.name);
-  url.searchParams.set('g', guest.code);
-  // URLSearchParams memakai '+' untuk spasi; '%20' lebih aman di semua aplikasi chat.
-  return url.toString().replace(/\+/g, '%20');
+  const base = (baseUrl || 'http://localhost:3000').replace(/\/+$/, '');
+  return `${base}/u/${guest.code}`;
 }
 
 /** Teks siap tempel ke WhatsApp. Hanya teks UI umum + data dari config (tidak mengarang kalimat sakral). */

@@ -72,6 +72,12 @@ export function createApp(opts: AppOptions) {
         },
       }),
     );
+    // Tautan pendek tamu: /u/KODE → halaman undangan yang sama; browser membaca KODE dari alamat,
+    // lalu meminta nama & kuota ke /api/guest/KODE. Kode salah tetap menampilkan undangan (sapaan umum).
+    app.get('/u/:code', (_req, res) => {
+      res.setHeader('Cache-Control', 'no-cache');
+      res.sendFile(join(dist, 'index.html'));
+    });
     app.get(['/admin', '/admin/'], (_req, res) => {
       res.setHeader('Cache-Control', 'no-store');
       res.sendFile(join(dist, 'admin.html'));
