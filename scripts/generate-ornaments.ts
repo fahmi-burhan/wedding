@@ -251,6 +251,72 @@ const svg = (w: number, h: number, body: string, extraDefs = '') =>
   );
 }
 
+// ── 7. Pita bunga atas (melintang penuh di atas tiap section, kesan "ramai") ─────────────
+{
+  const rnd = prng(51);
+  let leaves = '';
+  for (let i = 0; i < 28; i++) {
+    const x = -10 + i * 16 + (rnd() - 0.5) * 10;
+    // rotate(180) = daun menggantung ke bawah; diberi variasi ±55°.
+    leaves += leaf(x, 18 + rnd() * 24, 48 + rnd() * 46, 180 + (rnd() - 0.5) * 110, pick(rnd, C.leaf));
+  }
+  const vines =
+    vine([62, 40, 74, 80, 52, 120, 66, 168], 5, 52, 14) +
+    vine([248, 40, 262, 92, 238, 124, 252, 160], 5, 53, 13) +
+    vine([372, 40, 384, 72, 366, 104, 378, 140], 4, 54, 12);
+  const flowers =
+    hydrangea(36, 26, 58, 61, 48) +
+    rose(132, 46, 30, 15) +
+    hydrangea(212, 20, 50, 62, 40) +
+    rose(290, 50, 27, 60) +
+    hydrangea(374, 26, 56, 63, 46) +
+    blossom(100, 82, 8) + blossom(176, 72, 7, true) + blossom(330, 80, 8) + blossom(412, 72, 7, true);
+  writeFileSync(resolve(OUT, 'swag-top.svg'), svg(420, 170, leaves + vines + flowers));
+}
+
+// ── 8. Untaian bunga vertikal di tepi kiri (dicerminkan CSS untuk kanan) ─────────────────
+{
+  const rnd = prng(71);
+  let leaves = '';
+  for (let i = 0; i < 36; i++) {
+    const y = i * 22 + (rnd() - 0.5) * 10;
+    // rotate(90) = daun mengarah ke kanan (ke dalam halaman), variasi ±60°.
+    leaves += leaf(8 + rnd() * 24, y, 40 + rnd() * 42, 90 + (rnd() - 0.5) * 120, pick(rnd, C.leaf));
+  }
+  const strand = vine([22, -10, 64, 250, 2, 500, 30, 770], 26, 72, 15);
+  const flowers =
+    hydrangea(16, 84, 52, 72, 42) +
+    rose(56, 212, 26, 20) +
+    hydrangea(8, 352, 46, 73, 36) +
+    rose(50, 472, 24, 50) +
+    hydrangea(18, 612, 54, 74, 44) +
+    rose(60, 722, 22, 0) +
+    blossom(72, 142, 8) + blossom(82, 300, 7, true) + blossom(68, 542, 8) + blossom(80, 664, 7, true);
+  writeFileSync(resolve(OUT, 'garland-side.svg'), svg(150, 760, leaves + strand + flowers));
+}
+
+// ── 9. Latar tetap: cat air lembut + gugus bunga pudar di tepi ───────────────────────────
+{
+  const rnd = prng(81);
+  let washes = '';
+  for (let i = 0; i < 9; i++) {
+    const grad = rnd() < 0.5 ? 'wash' : 'washCream';
+    washes += `<ellipse cx="${f(rnd() * 600)}" cy="${f(rnd() * 1000)}" rx="${f(140 + rnd() * 160)}" ry="${f(120 + rnd() * 140)}" fill="url(#${grad})" opacity=".55"/>`;
+  }
+  let sprays = '';
+  for (let i = 0; i < 18; i++) {
+    const edgeX = i % 2 ? 560 + rnd() * 50 : -10 + rnd() * 50;
+    sprays += leaf(edgeX, rnd() * 1000, 60 + rnd() * 60, (i % 2 ? -90 : 90) + (rnd() - 0.5) * 120, pick(rnd, C.leaf));
+  }
+  const clusters =
+    hydrangea(30, 130, 92, 81, 50) + rose(150, 40, 42, 10) +
+    hydrangea(575, 430, 82, 82, 44) + rose(470, 330, 34, 40) +
+    hydrangea(25, 770, 86, 83, 46) + rose(140, 880, 36, 70) +
+    hydrangea(565, 950, 92, 84, 50);
+  const body = `<rect width="600" height="1000" fill="${C.petalWhite}"/>${washes}<g opacity=".28">${sprays}${clusters}</g>`;
+  writeFileSync(resolve(OUT, 'backdrop.svg'), svg(600, 1000, body).replace('width="600" height="1000" aria-hidden', 'width="600" height="1000" preserveAspectRatio="xMidYMid slice" aria-hidden'));
+}
+
 // ── 6. Favicon ──────────────────────────────────────────────────────────────────────────
 writeFileSync(
   resolve(PUBLIC, 'favicon.svg'),

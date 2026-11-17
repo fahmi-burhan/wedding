@@ -46,6 +46,8 @@ function ogMeta(baseUrl: string): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, rootDir, '');
   const baseUrl = (env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
+  // Proxy dev harus menuju port yang SAMA dengan server API (PORT di .env), bukan angka tetap.
+  const apiPort = env.PORT || '3000';
   return {
     root: webDir,
     publicDir: resolve(webDir, 'public'),
@@ -55,7 +57,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true, // bisa dibuka dari ponsel di Wi-Fi yang sama
       port: 5173,
-      proxy: { '/api': 'http://localhost:3000' },
+      proxy: { '/api': `http://127.0.0.1:${apiPort}` },
       fs: { allow: [rootDir] }, // izinkan impor config/ & shared/ di luar folder web
     },
     build: {

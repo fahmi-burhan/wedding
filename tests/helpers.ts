@@ -26,8 +26,8 @@ export function makeApp(start = BEFORE_DEADLINE, dbPath = ':memory:') {
   return { app, db, clock };
 }
 
-/** Body RSVP valid; field bisa ditimpa. renderedAt 10 dtk sebelum "sekarang". */
-export function rsvpBody(now: number, over: Record<string, unknown> = {}) {
+/** Body RSVP valid; field bisa ditimpa. Form dianggap sudah terbuka 10 dtk. */
+export function rsvpBody(_now: number, over: Record<string, unknown> = {}) {
   return {
     submissionId: randomUUID(),
     name: 'Budi Santoso',
@@ -37,7 +37,7 @@ export function rsvpBody(now: number, over: Record<string, unknown> = {}) {
     message: 'Barakallahu lakuma.',
     showMessage: true,
     website: '',
-    renderedAt: now - 10_000,
+    elapsedMs: 10_000,
     ...over,
   };
 }

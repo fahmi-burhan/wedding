@@ -28,6 +28,8 @@ Butuh **Node.js 24** atau lebih baru. Cek versinya dengan `node -v`. Semua perin
    ```
 5. Buka `http://localhost:5173/?to=Nama%20Tamu`. Panel admin ada di `http://localhost:5173/admin.html`.
 
+Di mode dev, Vite meneruskan `/api` ke port yang tertulis di `PORT` pada `.env`. Bila Anda mengganti `PORT`, hentikan `npm run dev` (Ctrl+C) lalu jalankan lagi.
+
 **Uji dari ponsel di Wi-Fi yang sama:**
 1. Lihat IP komputer dengan `ipconfig` (baris "IPv4 Address").
 2. Di ponsel, buka `http://IP-KOMPUTER:5173`.
@@ -231,7 +233,23 @@ Database (`data/wedding.db`) tidak tersentuh oleh `git pull`.
 
 ---
 
-## 7. Struktur folder
+## 7. Jika ada masalah
+
+| Gejala | Penyebab umum | Solusi |
+|---|---|---|
+| RSVP gagal / "Server sedang bermasalah", ucapan tidak muncul, admin tidak bisa login (mode dev) | Server API belum jalan, atau `PORT` di `.env` diubah saat `npm run dev` masih berjalan | Hentikan lalu jalankan ulang `npm run dev`. Pastikan terminal menampilkan `[server] berjalan di ...` |
+| "Mohon tunggu beberapa detik" saat kirim RSVP | Form dikirim < 3 detik setelah tampil (aturan anti-bot) | Tunggu sebentar lalu tekan Kirim lagi |
+| Pratinjau WhatsApp tanpa gambar | `PUBLIC_BASE_URL` kosong/salah saat `npm run build`, atau masih `http://` | Isi dengan `https://domain-anda`, build ulang, restart |
+| Cookie admin tidak tersimpan di VPS | `NODE_ENV=production` tetapi situs belum HTTPS | Aktifkan HTTPS (certbot) terlebih dahulu |
+
+Cek isi database dengan cepat (PowerShell, di folder proyek):
+```powershell
+node -e "const D=require('better-sqlite3');const d=new D('data/wedding.db',{readonly:true});console.log(d.prepare('select name,attendance,pax from rsvps').all())"
+```
+
+---
+
+## 8. Struktur folder
 
 ```
 config/event.ts        satu-satunya sumber data acara

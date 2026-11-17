@@ -1,10 +1,10 @@
 <!--
-  web/src/sections/CoverSection.vue — sampul layar penuh: label, nama mempelai, tanggal, sapaan tamu,
-  tombol "Buka Undangan".
+  web/src/sections/CoverSection.vue — sampul layar penuh: dekorasi bunga berlapis, monogram, nama (script),
+  tanggal, sapaan tamu, tombol "Buka Undangan".
   Dipanggil oleh: App.vue.
-  Memanggil: useGuest.ts (nama tamu), shared/date.ts, ornamen bouquet & corner-vine.
+  Memanggil: useGuest.ts (nama tamu), shared/date.ts, Monogram, Butterfly, ornamen SVG.
 
-  Urutan gerak saat tampil (mengikuti video 0–4 dtk): label → nama tersingkap kiri→kanan → tanggal → bunga masuk.
+  Urutan gerak saat tampil (mengikuti video 0–4 dtk): bunga & untaian masuk → monogram → nama tersingkap → tanggal → sapaan.
   Saat tombol ditekan: emit('open') SEGERA (agar musik boleh diputar dalam klik yang sama), lalu
   buket "menyapu" layar dan sampul memudar; setelah selesai emit('gone') agar App melepasnya dari DOM.
 -->
@@ -15,8 +15,11 @@ import { event } from '../../../config/event.ts';
 import { formatLongDate } from '../../../shared/date.ts';
 import { guest, GENERIC_GREETING } from '../composables/useGuest.ts';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
+import Monogram from '../components/Monogram.vue';
+import Butterfly from '../components/Butterfly.vue';
 import bouquet from '../assets/ornaments/bouquet.svg';
-import cornerVine from '../assets/ornaments/corner-vine.svg';
+import swagTop from '../assets/ornaments/swag-top.svg';
+import garland from '../assets/ornaments/garland-side.svg';
 
 const emit = defineEmits<{ open: []; gone: [] }>();
 
@@ -38,62 +41,59 @@ function open() {
 
 <template>
   <div
-    class="paper fixed inset-y-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 overflow-hidden transition-opacity"
+    class="fixed inset-y-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 overflow-hidden transition-opacity"
     :class="leaving ? 'opacity-0 duration-700 delay-[650ms]' : 'opacity-100'"
     role="dialog"
     aria-modal="true"
     aria-labelledby="cover-title"
   >
-    <!-- Ornamen -->
-    <img :src="cornerVine" alt="" aria-hidden="true" class="pointer-events-none absolute -right-2 -top-1 w-[54%] -scale-x-100 select-none" style="animation: wipe-in 1.6s var(--ease-soft) 0.3s both" />
-    <img
-      :src="bouquet"
-      alt=""
-      aria-hidden="true"
-      class="pointer-events-none absolute -bottom-8 -left-14 w-[82%] max-w-[400px] select-none"
-      style="animation: slide-in-left 1.4s var(--ease-soft) 1.2s both"
-    />
-    <img
-      :src="bouquet"
-      alt=""
-      aria-hidden="true"
-      class="pointer-events-none absolute -bottom-6 -right-12 w-[44%] max-w-[210px] select-none"
-      style="animation: slide-in-right 1.4s var(--ease-soft) 1.5s both"
-    />
+    <!-- Latar sampul: sama dengan latar tetap halaman, ditambah tekstur kertas. -->
+    <div class="backdrop" style="position: absolute" aria-hidden="true" />
+
+    <!-- Dekorasi berlapis -->
+    <img :src="garland" alt="" aria-hidden="true" class="pointer-events-none absolute inset-y-0 left-0 w-[96px] select-none object-cover object-left-top" style="animation: slide-in-left 1.3s var(--ease-soft) 0.1s both" />
+    <div class="pointer-events-none absolute inset-y-0 right-0 w-[96px] -scale-x-100" aria-hidden="true">
+      <img :src="garland" alt="" class="h-full w-full select-none object-cover object-left-top" style="animation: slide-in-left 1.3s var(--ease-soft) 0.25s both" />
+    </div>
+    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute -top-4 left-1/2 w-[118%] max-w-none -translate-x-1/2 select-none" style="animation: rise-in 1.2s var(--ease-soft) 0.2s both" />
+    <img :src="bouquet" alt="" aria-hidden="true" class="pointer-events-none absolute -bottom-10 -left-16 w-[78%] max-w-[380px] select-none" style="animation: slide-in-left 1.4s var(--ease-soft) 1.1s both" />
+    <img :src="bouquet" alt="" aria-hidden="true" class="pointer-events-none absolute -bottom-8 -right-14 w-[56%] max-w-[260px] select-none" style="animation: slide-in-right 1.4s var(--ease-soft) 1.3s both" />
+    <Butterfly class="left-[18%] top-[30%] z-10" :size="26" :fx="60" :fy="-40" :duration="12" />
+    <Butterfly class="right-[16%] top-[58%] z-10" :size="20" :fx="-50" :fy="-60" :duration="10" :delay="-3" />
 
     <!-- Isi -->
     <div
-      class="relative flex h-full flex-col items-center px-8 pb-[34vh] pt-[11vh] text-center transition duration-500"
+      class="relative flex h-full flex-col items-center justify-center px-10 pb-[18vh] pt-[14vh] text-center transition duration-500"
       :class="leaving ? '-translate-y-4 opacity-0' : ''"
     >
-      <p class="text-[11px] font-bold uppercase tracking-[0.36em] text-ink-soft" style="animation: rise-in 0.9s var(--ease-soft) 0.1s both">
+      <div style="animation: rise-in 1s var(--ease-soft) 0.5s both"><Monogram /></div>
+
+      <p class="mt-10 text-[11px] font-bold uppercase tracking-[0.36em] text-ink-soft" style="animation: rise-in 0.9s var(--ease-soft) 0.8s both">
         {{ event.title }}
       </p>
-      <OrnamentDivider class="mt-3" style="animation: rise-in 0.9s var(--ease-soft) 0.25s both" />
-
-      <h1 id="cover-title" class="mt-6 font-display text-[3.1rem] font-bold leading-[1.05] text-ink">
-        <span class="block" style="animation: wipe-in 1.1s var(--ease-soft) 0.4s both">{{ event.couple.groom.shortName }}</span>
-        <span class="my-1 block font-display text-3xl font-normal italic text-ink-soft" style="animation: rise-in 0.8s var(--ease-soft) 0.9s both">&amp;</span>
-        <span class="block" style="animation: wipe-in 1.1s var(--ease-soft) 1s both">{{ event.couple.bride.shortName }}</span>
+      <h1 id="cover-title" class="mt-2 font-script text-[3.3rem] leading-[1.1] text-ink" style="animation: wipe-in 1.2s var(--ease-soft) 1s both">
+        {{ event.couple.groom.shortName }}
+        <span class="font-display text-[1.8rem] italic text-ink-soft">&amp;</span>
+        {{ event.couple.bride.shortName }}
       </h1>
+      <OrnamentDivider class="mt-3" style="animation: rise-in 0.9s var(--ease-soft) 1.3s both" />
+      <p class="mt-2 text-[15px] font-bold" style="animation: rise-in 0.9s var(--ease-soft) 1.4s both">{{ dateLabel }}</p>
 
-      <OrnamentDivider class="mt-6" style="animation: rise-in 0.9s var(--ease-soft) 1.3s both" />
-      <p class="mt-3 text-[15px] font-bold" style="animation: rise-in 0.9s var(--ease-soft) 1.4s both">{{ dateLabel }}</p>
-
-      <div class="mt-auto pt-8" style="animation: rise-in 0.9s var(--ease-soft) 1.7s both">
+      <div class="mt-7 w-full max-w-[290px] rounded-3xl bg-paper/90 px-5 py-4 shadow-[0_10px_30px_rgba(30,32,34,0.12)] ring-1 ring-line/35" style="animation: rise-in 0.9s var(--ease-soft) 1.7s both">
         <p class="text-sm text-ink-soft">Kepada Yth.</p>
-        <p class="mt-1 font-display text-xl font-bold text-ink [overflow-wrap:anywhere]">{{ greetingName }}</p>
-        <p v-if="guest.name" class="mt-1 text-xs text-ink-soft">Mohon maaf bila ada kesalahan penulisan nama/gelar.</p>
-        <button
-          ref="openBtn"
-          type="button"
-          class="mt-5 inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-bold tracking-wide text-paper shadow-md transition hover:bg-ink/85 active:scale-[0.98]"
-          @click="open"
-        >
-          <MailOpen class="size-4" aria-hidden="true" />
-          Buka Undangan
-        </button>
+        <p class="mt-0.5 font-display text-lg font-bold leading-snug text-ink [overflow-wrap:anywhere]">{{ greetingName }}</p>
+        <p v-if="guest.name" class="mt-1 text-[11px] italic text-ink-soft">Mohon maaf bila ada kesalahan penulisan nama/gelar.</p>
       </div>
+      <button
+        ref="openBtn"
+        type="button"
+        class="mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3 text-sm font-bold uppercase tracking-[0.14em] text-paper shadow-lg transition hover:bg-ink/85 active:scale-[0.98]"
+        style="animation: rise-in 0.9s var(--ease-soft) 1.9s both"
+        @click="open"
+      >
+        <MailOpen class="size-4" aria-hidden="true" />
+        Buka Undangan
+      </button>
     </div>
 
     <!-- Buket yang menyapu layar saat dibuka (transisi video 5–6 dtk). -->

@@ -1,6 +1,6 @@
 <!--
-  web/src/sections/OpeningSection.vue — salam pembuka berbahasa Arab + kalimat undangan.
-  Dipanggil oleh: App.vue.  Memanggil: config/event.ts (opening), RevealLines, OrnamentDivider.
+  web/src/sections/OpeningSection.vue — salam pembuka berbahasa Arab + kalimat undangan, di dalam kartu.
+  Dipanggil oleh: App.vue.  Memanggil: config/event.ts (opening), SectionShell, RevealLines, OrnamentDivider.
 -->
 <script setup lang="ts">
 import { event } from '../../../config/event.ts';
@@ -10,8 +10,8 @@ import RevealLines from '../components/RevealLines.vue';
 </script>
 
 <template>
-  <SectionShell id="pembuka" flowers="both" labelledby="pembuka-salam">
-    <h2 id="pembuka-salam" lang="ar" dir="rtl" v-reveal:blur class="font-arabic text-[2.1rem] font-bold leading-[1.9] text-ink">
+  <SectionShell id="pembuka" labelledby="pembuka-salam">
+    <h2 id="pembuka-salam" lang="ar" dir="rtl" v-reveal:blur class="font-arabic text-[2rem] font-bold leading-[1.9] text-ink">
       {{ event.opening.salamArabic }}
     </h2>
     <OrnamentDivider v-reveal="300" class="my-6" />

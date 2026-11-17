@@ -9,8 +9,8 @@ import SectionLabel from '../components/SectionLabel.vue';
 </script>
 
 <template>
-  <SectionShell v-if="event.speaker" id="tausiyah" tone="cream" flowers="right" :full="false">
+  <SectionShell v-if="event.speaker" id="tausiyah" decor="sides" :full="false">
     <SectionLabel :text="event.speaker.label" />
-    <p v-reveal:mask="250" class="font-display text-[1.6rem] font-bold leading-snug text-ink">{{ event.speaker.name }}</p>
+    <p v-reveal:mask="250" class="font-display text-[1.5rem] font-bold leading-snug text-ink">{{ event.speaker.name }}</p>
   </SectionShell>
 </template>

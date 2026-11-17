@@ -12,6 +12,7 @@ import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/400-italic.css';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/700.css';
+import '@fontsource/great-vibes/400.css';
 import '@fontsource/aref-ruqaa/700.css';
 import '@fontsource/amiri/400.css';
 import './styles/main.css';

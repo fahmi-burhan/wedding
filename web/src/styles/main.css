@@ -20,6 +20,7 @@
 
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-body: 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-script: 'Great Vibes', 'Playfair Display', cursive;
   --font-arabic: 'Aref Ruqaa', 'Amiri', serif;
   --font-arabic-text: 'Amiri', 'Aref Ruqaa', serif;
 
@@ -66,6 +67,23 @@
 .paper-cream {
   background-color: var(--color-cream-tint);
   background-image: var(--paper-noise);
+}
+
+/* Pita warna solid (padanan pita hijau sage di website referensi, memakai cream milik palet klien). */
+.paper-band {
+  background-color: #e3d5c6;
+  background-image: var(--paper-noise);
+}
+
+/*
+ * Latar tetap di belakang semua section: cat air + gugus bunga pudar. Karena `fixed`, section
+ * bergeser di atasnya → kesan berlapis/parallax seperti referensi, tanpa JavaScript.
+ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-paper) url('../assets/ornaments/backdrop.svg') center / cover no-repeat;
+  pointer-events: none;
 }
 
 /* Bayangan dedaunan yang bergoyang pelan (ciri khas video referensi). */
@@ -184,6 +202,41 @@
   to { transform: rotate(360deg); }
 }
 
+/* Kelopak yang terus melayang pelan di latar (setelah undangan dibuka). */
+@keyframes petal-drift {
+  0% { transform: translate3d(0, -8vh, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.8; }
+  50% { transform: translate3d(var(--drift, 40px), 50vh, 0) rotate(calc(var(--spin, 360deg) / 2)); }
+  92% { opacity: 0.8; }
+  100% { transform: translate3d(calc(var(--drift, 40px) * -0.5), 108vh, 0) rotate(var(--spin, 360deg)); opacity: 0; }
+}
+
+/* Kupu-kupu: sayap mengepak + terbang mengikuti lintasan berliku. */
+.butterfly .wing-l,
+.butterfly .wing-r {
+  transform-box: fill-box;
+  animation: flap 0.32s ease-in-out infinite alternate;
+}
+.butterfly .wing-l { transform-origin: right center; }
+.butterfly .wing-r { transform-origin: left center; }
+@keyframes flap {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0.2); }
+}
+@keyframes flutter-path {
+  0% { transform: translate(0, 0) rotate(-8deg); }
+  25% { transform: translate(var(--fx, 60px), calc(var(--fy, -40px) * 0.6)) rotate(10deg); }
+  50% { transform: translate(calc(var(--fx, 60px) * 0.4), var(--fy, -40px)) rotate(-4deg); }
+  75% { transform: translate(calc(var(--fx, 60px) * -0.5), calc(var(--fy, -40px) * 0.3)) rotate(8deg); }
+  100% { transform: translate(0, 0) rotate(-8deg); }
+}
+
+/* Panah kecil "gulir ke bawah". */
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
 /* ── Hormati pengaturan "kurangi gerakan" di ponsel tamu ──────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -197,7 +250,8 @@
     transition: none !important;
   }
   .draw-path { stroke-dashoffset: 0 !important; transition: none !important; }
-  .leaf-shadow, .float-soft { animation: none !important; }
+  .leaf-shadow, .float-soft, .butterfly, .butterfly * { animation: none !important; }
+  .ambient-petals { display: none !important; }
   *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;

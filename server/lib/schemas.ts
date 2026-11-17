@@ -42,8 +42,9 @@ export const rsvpBodySchema = z
     showMessage: z.boolean().optional().default(true),
     // Honeypot: input tersembunyi yang hanya diisi bot. Divalidasi terpisah di route.
     website: z.string().max(200).optional().default(''),
-    // Waktu (ms epoch) saat form tampil di layar tamu; untuk mendeteksi kiriman super cepat.
-    renderedAt: z.number().int().positive(),
+    // Lama (ms) form terbuka sebelum dikirim, diukur di browser tamu. Sengaja berupa SELISIH,
+    // bukan jam: jam ponsel tamu bisa berbeda beberapa detik/menit dari jam server.
+    elapsedMs: z.number().int().min(0).max(30 * 24 * 60 * 60 * 1000),
   })
   .superRefine((v, ctx) => {
     if (v.attendance === 'tidak') {

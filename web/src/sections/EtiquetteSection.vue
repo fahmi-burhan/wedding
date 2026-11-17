@@ -21,10 +21,10 @@ const ICONS: Record<EtiquetteItem['icon'], unknown> = {
 </script>
 
 <template>
-  <SectionShell id="adab" tone="cream" flowers="both" labelledby="adab-judul">
-    <h2 id="adab-judul" v-reveal:mask class="font-display text-[1.75rem] font-bold leading-snug text-ink">{{ event.etiquette.title }}</h2>
+  <SectionShell id="adab" labelledby="adab-judul">
+    <h2 id="adab-judul" v-reveal:mask class="font-display text-[1.55rem] font-bold leading-snug text-ink">{{ event.etiquette.title }}</h2>
     <OrnamentDivider v-reveal="200" class="my-5" />
-    <ul class="mx-auto flex max-w-[290px] flex-col gap-4 text-left">
+    <ul class="mx-auto flex max-w-[270px] flex-col gap-4 text-left">
       <li v-for="(item, i) in event.etiquette.items" :key="item.text" v-reveal="300 + i * 150" class="flex items-center gap-4">
         <span
           class="grid size-11 shrink-0 place-items-center rounded-full"

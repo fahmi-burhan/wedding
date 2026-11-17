@@ -16,6 +16,7 @@ import { event } from '../../config/event.ts';
 import { loadGuest } from './composables/useGuest.ts';
 import { startReveals } from './composables/reveal.ts';
 import CoverSection from './sections/CoverSection.vue';
+import HeroSection from './sections/HeroSection.vue';
 import OpeningSection from './sections/OpeningSection.vue';
 import VerseSection from './sections/VerseSection.vue';
 import CoupleSection from './sections/CoupleSection.vue';
@@ -30,6 +31,7 @@ import PrayerSection from './sections/PrayerSection.vue';
 import ClosingSection from './sections/ClosingSection.vue';
 import MusicToggle from './components/MusicToggle.vue';
 import PetalBurst from './components/PetalBurst.vue';
+import AmbientPetals from './components/AmbientPetals.vue';
 
 const OPENED_KEY = 'undangan.opened';
 const wasOpened = (() => {
@@ -78,18 +80,22 @@ async function onGone() {
 </script>
 
 <template>
+  <!-- Latar tetap berlapis: cat air + bunga pudar, lalu bayangan daun yang bergoyang. -->
+  <div class="backdrop" aria-hidden="true" />
   <div class="leaf-shadow" aria-hidden="true" />
 
   <CoverSection v-if="coverVisible" @open="onOpen" @gone="onGone" />
   <PetalBurst v-if="showPetals" />
+  <AmbientPetals v-if="opened" />
 
   <main
     ref="main"
     tabindex="-1"
     :inert="!opened"
     :aria-hidden="!opened"
-    class="relative mx-auto w-full max-w-[480px] overflow-x-clip shadow-[0_0_60px_rgba(30,32,34,0.08)] outline-none"
+    class="relative z-[2] mx-auto w-full max-w-[480px] overflow-x-clip shadow-[0_0_60px_rgba(30,32,34,0.08)] outline-none"
   >
+    <HeroSection />
     <OpeningSection />
     <VerseSection />
     <CoupleSection />

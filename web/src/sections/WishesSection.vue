@@ -53,13 +53,13 @@ onMounted(() => load(1));
 watch(wishesVersion, () => load(1));
 
 const when = (iso: string) => formatDateTime(iso, event.timezone, event.timezoneLabel);
+const initial = (name: string) => (name.match(/[\p{L}\p{N}]/u)?.[0] ?? '•').toUpperCase();
 </script>
 
 <template>
-  <SectionShell id="ucapan" tone="cream" flowers="none" :full="false" labelledby="ucapan-judul">
-    <SectionLabel text="Ucapan &amp; Doa" />
-    <h2 id="ucapan-judul" class="sr-only">Ucapan dan Doa dari Tamu</h2>
-    <p v-reveal class="-mt-2 mb-6 text-sm text-ink-soft">{{ total }} ucapan</p>
+  <SectionShell id="ucapan" tone="band" decor="sides" :card="false" :full="false">
+    <SectionLabel script="Ucapan &amp; Doa" text="Doa Restu Para Tamu" />
+    <p v-reveal class="-mt-2 mb-6 text-sm font-bold text-ink">{{ total }} ucapan</p>
 
     <div ref="listTop" class="scroll-mt-6" aria-live="polite" :aria-busy="loading">
       <p v-if="failed" class="text-sm text-ink-soft">
@@ -68,11 +68,17 @@ const when = (iso: string) => formatDateTime(iso, event.timezone, event.timezone
       </p>
       <p v-else-if="!loading && !items.length" class="text-sm text-ink-soft">Belum ada ucapan. Jadilah yang pertama mendoakan kedua mempelai.</p>
 
-      <ul v-else class="flex flex-col gap-3 text-left" :class="loading ? 'opacity-60' : ''">
-        <li v-for="w in items" :key="w.id" class="rounded-xl border border-line/50 bg-paper/90 p-4 shadow-sm">
-          <p class="font-bold text-ink [overflow-wrap:anywhere]">{{ w.name }}</p>
-          <p class="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink [overflow-wrap:anywhere]">{{ w.message }}</p>
-          <p class="mt-2 text-xs text-ink-soft">{{ when(w.createdAt) }}</p>
+      <ul v-else class="mx-2 flex max-h-[34rem] flex-col gap-3 overflow-y-auto rounded-[1.75rem] bg-paper/95 p-4 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35" :class="loading ? 'opacity-60' : ''" tabindex="0" aria-label="Daftar ucapan">
+        <li v-for="w in items" :key="w.id" class="flex gap-3 border-b border-line/30 pb-3 last:border-b-0 last:pb-0">
+          <!-- Avatar inisial (tanpa foto tamu). -->
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-cream-tint font-display text-lg font-bold text-ink ring-1 ring-line/40" aria-hidden="true">
+            {{ initial(w.name) }}
+          </span>
+          <div class="min-w-0">
+            <p class="font-bold text-ink [overflow-wrap:anywhere]">{{ w.name }}</p>
+            <p class="text-[11px] text-ink-soft">{{ when(w.createdAt) }}</p>
+            <p class="mt-1 whitespace-pre-line text-[14px] leading-relaxed text-ink [overflow-wrap:anywhere]">{{ w.message }}</p>
+          </div>
         </li>
       </ul>
     </div>
@@ -99,6 +105,6 @@ const when = (iso: string) => formatDateTime(iso, event.timezone, event.timezone
       </button>
     </nav>
 
-    <img :src="sprig" alt="" aria-hidden="true" class="mx-auto mt-10 w-44" loading="lazy" />
+    <img :src="sprig" alt="" aria-hidden="true" class="mx-auto mt-8 w-44" loading="lazy" />
   </SectionShell>
 </template>

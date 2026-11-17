@@ -15,9 +15,9 @@ const showMap = ref(false);
 </script>
 
 <template>
-  <SectionShell id="lokasi" flowers="left">
-    <SectionLabel text="Lokasi Acara" />
-    <p v-reveal:mask="200" class="font-display text-[1.75rem] font-bold leading-snug text-ink">{{ event.venue.name }}</p>
+  <SectionShell id="lokasi">
+    <SectionLabel script="Lokasi" text="Lokasi Acara" />
+    <p v-reveal:mask="200" class="font-display text-[1.45rem] font-bold leading-snug text-ink">{{ event.venue.name }}</p>
     <address v-reveal="400" class="mt-3 not-italic text-[15px] text-ink">
       <span v-for="line in event.venue.addressLines" :key="line" class="block">{{ line }}</span>
     </address>
@@ -27,7 +27,7 @@ const showMap = ref(false);
       :href="event.venue.mapsUrl"
       target="_blank"
       rel="noopener noreferrer"
-      class="mt-7 inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-bold text-paper shadow-md transition hover:bg-ink/85"
+      class="mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-bold text-paper shadow-md transition hover:bg-ink/85"
     >
       <MapPin class="size-4" aria-hidden="true" />
       Buka Google Maps

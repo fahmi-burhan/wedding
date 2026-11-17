@@ -10,6 +10,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 
+/** filled = kapsul diberi latar kertas (dipakai di atas latar bergambar). */
+defineProps<{ filled?: boolean }>();
+
 const box = ref<HTMLElement | null>(null);
 const w = ref(320);
 const h = ref(520);
@@ -40,6 +43,12 @@ function capsule(inset: number) {
 
 <template>
   <div ref="box" v-reveal:draw class="relative mx-auto w-full max-w-[340px] px-7 py-24">
+    <!-- Isi kapsul: kertas tembus pandang (rounded-full pada persegi panjang = ujung setengah lingkaran). -->
+    <div
+      v-if="filled"
+      class="absolute inset-0 rounded-full bg-paper/90 shadow-[0_12px_40px_rgba(30,32,34,0.12)]"
+      aria-hidden="true"
+    />
     <svg class="pointer-events-none absolute inset-0 size-full overflow-visible" :viewBox="`0 0 ${w} ${h}`" aria-hidden="true">
       <rect
         v-for="(c, i) in [capsule(1), capsule(8)]"

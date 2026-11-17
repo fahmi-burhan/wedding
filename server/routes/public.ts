@@ -99,7 +99,7 @@ export function publicRouter(db: DB, now: () => number): Router {
     const t = now();
 
     // 3) Terlalu cepat sejak form tampil.
-    if (t - body.renderedAt < MIN_FILL_MS) {
+    if (body.elapsedMs < MIN_FILL_MS) {
       logSpam.run(ipHash, 'terlalu-cepat');
       res.status(400).json({ ok: false, error: 'Mohon tunggu beberapa detik, lalu tekan Kirim lagi.' });
       return;

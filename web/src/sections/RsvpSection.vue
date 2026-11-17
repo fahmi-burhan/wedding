@@ -120,7 +120,7 @@ async function submit() {
         message: form.message,
         showMessage: form.showMessage,
         website: form.website,
-        renderedAt: renderedAt.value,
+        elapsedMs: Math.max(0, Date.now() - renderedAt.value),
       },
     });
     saved.value = res.rsvp;
@@ -146,12 +146,11 @@ function edit() {
 </script>
 
 <template>
-  <SectionShell id="rsvp" flowers="none" :full="false" labelledby="rsvp-judul">
-    <SectionLabel text="Konfirmasi Kehadiran" />
-    <h2 id="rsvp-judul" class="sr-only">Konfirmasi Kehadiran</h2>
+  <SectionShell id="rsvp" decor="sides" :card="false" :full="false">
+    <SectionLabel script="Kehadiran" text="Konfirmasi Kehadiran" />
 
     <!-- Form ditutup (tenggat lewat) -->
-    <div v-if="!open && !saved" v-reveal class="rounded-2xl border border-line/60 bg-white/80 p-6 text-[15px] shadow-sm">
+    <div v-if="!open && !saved" v-reveal class="mx-2 rounded-[1.75rem] bg-paper/95 p-6 text-[15px] shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35">
       <p class="font-bold text-ink">Konfirmasi kehadiran telah ditutup.</p>
       <p class="mt-2 text-ink-soft">Batas konfirmasi: {{ deadlineLabel }}. Terima kasih atas perhatian Bapak/Ibu/Saudara/i.</p>
       <a
@@ -164,7 +163,7 @@ function edit() {
     </div>
 
     <!-- Ringkasan jawaban yang tersimpan -->
-    <div v-else-if="saved && !editing" class="rounded-2xl border border-line/60 bg-white/85 p-6 text-left shadow-sm" aria-live="polite">
+    <div v-else-if="saved && !editing" class="mx-2 rounded-[1.75rem] bg-paper/95 p-6 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35" aria-live="polite">
       <p ref="resultHeading" tabindex="-1" class="flex items-center gap-2 font-display text-xl font-bold text-ink">
         <Check class="size-5 shrink-0" aria-hidden="true" />
         Terima kasih, {{ saved.name }}
@@ -193,7 +192,7 @@ function edit() {
     </div>
 
     <!-- Form -->
-    <form v-else v-reveal="200" class="rounded-2xl border border-line/60 bg-white/90 p-5 text-left shadow-sm sm:p-6" novalidate @submit.prevent="submit">
+    <form v-else v-reveal="200" class="relative mx-2 rounded-[1.75rem] bg-paper/95 p-5 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35 sm:p-6" novalidate @submit.prevent="submit">
       <p class="mb-5 text-center text-sm text-ink-soft">Mohon konfirmasi sebelum <strong class="text-ink">{{ deadlineLabel }}</strong>.</p>
 
       <label for="rsvp-nama" class="mb-1.5 block text-sm font-bold">Nama</label>
@@ -279,7 +278,7 @@ function edit() {
       <button
         type="submit"
         :disabled="submitting"
-        class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-ink px-6 py-3.5 text-[15px] font-bold text-paper shadow-md transition hover:bg-ink/85 disabled:cursor-wait disabled:opacity-70"
+        class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[15px] font-bold text-paper shadow-md transition hover:bg-ink/85 disabled:cursor-wait disabled:opacity-70"
       >
         <Send class="size-4" aria-hidden="true" />
         {{ submitting ? 'Mengirim…' : error ? 'Coba kirim lagi' : saved ? 'Simpan perubahan' : 'Kirim Konfirmasi' }}

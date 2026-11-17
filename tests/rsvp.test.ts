@@ -66,7 +66,7 @@ test('honeypot terisi → ditolak & tercatat di spam_log', async () => {
 
 test('kiriman terlalu cepat (< 3 dtk sejak form tampil) ditolak', async () => {
   const { app, db, clock } = makeApp();
-  const res = await request(app).post('/api/rsvp').send(rsvpBody(clock.now, { renderedAt: clock.now - 500 }));
+  const res = await request(app).post('/api/rsvp').send(rsvpBody(clock.now, { elapsedMs: 500 }));
   assert.equal(res.status, 400);
   assert.equal(db.prepare('SELECT COUNT(*) FROM rsvps').pluck().get(), 0);
 });
