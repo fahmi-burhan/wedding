@@ -1,0 +1,38 @@
+<!doctype html>
+<!--
+  web/index.html — kerangka halaman undangan.
+  Dipanggil oleh: browser tamu (disajikan Express dari /dist setelah build).
+  Memanggil: /src/main.ts. Placeholder %OG_...% diisi plugin og-meta di web/vite.config.ts.
+  Class "is-locked" mengunci scroll sampai tamu menekan "Buka Undangan".
+-->
+<html lang="id" class="is-locked">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#F8F7F4" />
+    <meta name="color-scheme" content="light" />
+    <title>%OG_TITLE%</title>
+    <meta name="description" content="%OG_DESCRIPTION%" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content="%OG_TITLE%" />
+    <meta property="og:description" content="%OG_DESCRIPTION%" />
+    <meta property="og:url" content="%OG_URL%" />
+    <meta property="og:image" content="%OG_IMAGE%" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <noscript>
+      <p style="padding: 24px; font-family: sans-serif; text-align: center">
+        Undangan ini membutuhkan JavaScript. Silakan buka di browser seperti Chrome atau Safari.
+      </p>
+    </noscript>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

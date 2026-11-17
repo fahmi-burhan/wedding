@@ -1,0 +1,205 @@
+/*
+ * web/src/styles/main.css — token desain + animasi undangan.
+ * Dipanggil oleh: web/src/main.ts dan web/src/admin-main.ts.
+ * Memanggil: Tailwind CSS v4, ornamen di web/src/assets/ornaments/.
+ *
+ * Palet mengikuti catatan klien: putih & cream dominan, teks hitam, biru HANYA untuk bunga.
+ * Warna `line` (#9CA0A2) kontrasnya rendah → hanya untuk garis dekoratif, tidak untuk teks.
+ */
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f8f7f4;
+  --color-cream: #d5c3b0;
+  --color-cream-tint: #efe7dd;
+  --color-floral: #8a9ea8;
+  --color-line: #9ca0a2;
+  --color-ink: #1e2022;
+  --color-ink-soft: #4a4f52;
+  --color-backdrop: #e7e2da;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-arabic: 'Aref Ruqaa', 'Amiri', serif;
+  --font-arabic-text: 'Amiri', 'Aref Ruqaa', serif;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  /* Scroll dikunci selama sampul tampil. */
+  html.is-locked,
+  html.is-locked body {
+    overflow: hidden;
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-backdrop);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  [lang='ar'] {
+    line-height: 2;
+  }
+}
+
+/* Tekstur kertas: noise SVG sangat tipis (tanpa berkas gambar, ±400 byte). */
+:root {
+  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .4 0 0 0 0 .35 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.paper {
+  background-color: var(--color-paper);
+  background-image: var(--paper-noise);
+}
+.paper-cream {
+  background-color: var(--color-cream-tint);
+  background-image: var(--paper-noise);
+}
+
+/* Bayangan dedaunan yang bergoyang pelan (ciri khas video referensi). */
+.leaf-shadow {
+  position: fixed;
+  inset: -12%;
+  background: url('../assets/ornaments/leaf-shadow.svg') center / 640px auto repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  animation: leaf-sway 14s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes leaf-sway {
+  from { transform: translate3d(-1.5%, 1%, 0) rotate(-1deg); }
+  to { transform: translate3d(1.5%, -1%, 0) rotate(1deg); }
+}
+
+/* Ornamen bunga mengambang halus. */
+.float-soft {
+  animation: float-soft 7s ease-in-out infinite alternate;
+}
+@keyframes float-soft {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-6px) rotate(-1.2deg); }
+}
+
+/* ── Animasi muncul saat di-scroll (dipicu web/src/composables/reveal.ts) ─────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-zoom {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+  transition-delay: var(--d, 0ms);
+}
+/*
+ * Tirai kiri→kanan untuk judul & nama (seperti teks "Husein" tersingkap di video).
+ * Memakai mask-image bergradasi, BUKAN clip-path: IntersectionObserver ikut menghitung clip-path,
+ * sehingga elemen yang terpotong 100% dianggap "tidak pernah terlihat" dan animasinya tidak pernah jalan.
+ * Gradasi juga memberi tepi sapuan yang lembut.
+ */
+.reveal-mask {
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  transition: mask-position 1100ms var(--ease-soft), -webkit-mask-position 1100ms var(--ease-soft);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-blur {
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 900ms var(--ease-soft), filter 900ms var(--ease-soft);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-in,
+.reveal-zoom.is-in {
+  opacity: 1;
+  transform: none;
+}
+.reveal-mask.is-in {
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+}
+.reveal-blur.is-in {
+  opacity: 1;
+  filter: none;
+}
+/* Garis SVG yang "tergambar" (bingkai lengkung). */
+.draw-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1600ms ease-in-out;
+  transition-delay: var(--d, 0ms);
+}
+.is-in .draw-path {
+  stroke-dashoffset: 0;
+}
+
+/* ── Transisi buka undangan ─────────────────────────────────────────────────────── */
+@keyframes bouquet-sweep {
+  0% { transform: translate(-70%, 60%) rotate(-8deg) scale(1.6); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(110%, -130%) rotate(10deg) scale(2.2); opacity: 1; }
+}
+@keyframes petal-fall {
+  0% { transform: translate3d(0, -12vh, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 30px), 112vh, 0) rotate(var(--spin, 300deg)); opacity: 0.9; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translate(-18%, 12%); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translate(18%, 12%) scaleX(-1); }
+  to { opacity: 1; transform: scaleX(-1); }
+}
+@keyframes wipe-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 -2% 0 0); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Hormati pengaturan "kurangi gerakan" di ponsel tamu ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .reveal-zoom, .reveal-mask, .reveal-blur {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .draw-path { stroke-dashoffset: 0 !important; transition: none !important; }
+  .leaf-shadow, .float-soft { animation: none !important; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,14 @@
+# .gitignore — berkas yang tidak boleh masuk git.
+node_modules/
+dist/
+# Rahasia (hash kata sandi admin, garam IP).
+.env
+# Data tamu & RSVP (pribadi) + cadangan.
+data/
+# Referensi visual (video 133 MB, milik pihak lain) — hanya acuan, bukan bagian proyek.
+referensi/
+# Foto asli resolusi tinggi (bila nanti ada).
+assets-src/
+*.log
+.DS_Store
+Thumbs.db

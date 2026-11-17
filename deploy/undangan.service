@@ -1,0 +1,23 @@
+# deploy/undangan.service — unit systemd agar server undangan berjalan otomatis di VPS (Linux)
+# dan hidup lagi bila crash atau VPS reboot.
+# Pasang:  sudo cp deploy/undangan.service /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now undangan
+# Sesuaikan User dan WorkingDirectory dengan VPS Anda.
+[Unit]
+Description=Undangan Walimah (Express + SQLite)
+After=network.target
+
+[Service]
+Type=simple
+User=undangan
+WorkingDirectory=/home/undangan/app
+ExecStart=/usr/bin/node --env-file=.env server/index.ts
+Restart=on-failure
+RestartSec=3
+# Pengamanan dasar: proses tidak bisa menulis ke luar folder aplikasi.
+NoNewPrivileges=true
+ProtectSystem=full
+ReadWritePaths=/home/undangan/app/data
+
+[Install]
+WantedBy=multi-user.target

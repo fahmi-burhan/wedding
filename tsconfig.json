@@ -1,0 +1,21 @@
+{
+  "//": "tsconfig.json — pengecekan tipe untuk server (Node type stripping) & web (Vue). Tidak menghasilkan berkas (noEmit). Dipakai editor & `npm run typecheck`.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node", "vite/client"],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve"
+  },
+  "include": ["config/**/*.ts", "shared/**/*.ts", "server/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts", "web/**/*.ts", "web/**/*.vue"],
+  "exclude": ["node_modules", "dist"]
+}
