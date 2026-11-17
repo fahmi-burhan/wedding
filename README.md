@@ -129,6 +129,37 @@ Tamu tanpa tautan personal tetap bisa RSVP dengan batas `rsvp.defaultMaxPax` (sa
 
 ## 5. Deploy ke VPS (dari GitHub)
 
+### 5A. VPS sahoor.cloud (aaPanel + pm2) — cara yang dipakai saat ini
+
+- **Lokasi aplikasi:** `/home/advan/apps/wedding`. Sengaja di luar `/www/wwwroot`, supaya Nginx tidak mungkin menyajikan `.env` atau database.
+- **Proses:** pm2 dengan nama `wedding`, dikonfigurasi di [deploy/ecosystem.config.cjs](deploy/ecosystem.config.cjs). Aplikasi mendengarkan di `127.0.0.1:4234`.
+- **Panel:** aaPanel → situs `wedding.sahoor.cloud` → Reverse proxy ke `http://127.0.0.1:4234`, SSL Let's Encrypt, Force HTTPS.
+
+Masuk ke server dari PowerShell:
+```powershell
+ssh advan@sahoor.cloud
+```
+
+Perintah berikut dijalankan di VPS.
+
+**Memperbarui setelah ada commit baru:**
+```bash
+cd ~/apps/wedding && git pull && npm ci && npm run build && pm2 restart wedding
+```
+
+**Melihat log dan status:**
+```bash
+pm2 logs wedding
+pm2 ls
+```
+
+**Mengganti kata sandi admin:**
+```bash
+cd ~/apps/wedding && npm run admin:password && pm2 restart wedding
+```
+
+### 5B. VPS lain tanpa panel (systemd + Nginx)
+
 Panduan ini untuk VPS Ubuntu/Debian. Perintah di VPS dijalankan lewat SSH (bash). Sambungkan dari Windows dengan:
 ```powershell
 ssh user@ip-vps
