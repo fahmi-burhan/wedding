@@ -85,12 +85,9 @@ npm run ornaments
 
 ## 3. Daftar tamu & tautan personal
 
-Setiap tamu mendapat **kode** unik dan tautan pendek `https://domain/u/KODE`. Kode itu yang membuat:
-- nama tamu tampil di sampul (nama dibaca dari server, jadi tidak bisa diubah-ubah lewat URL);
-- jumlah orang dibatasi sesuai kuota tamu itu;
-- RSVP ulang memperbarui jawaban lama, bukan menambah baris baru.
-
-Tautan lama bentuk `?to=Nama&g=KODE` tetap berfungsi bila sudah terlanjur dibagikan.
+Tautan personal (`?to=Nama&g=KODE`) melakukan tiga hal:
+- `to` menampilkan nama tamu di sampul;
+- `g` adalah **kode tamu** unik: server memakainya untuk membatasi jumlah orang sesuai kuota tamu itu, dan agar RSVP ulang memperbarui jawaban lama, bukan menambah baris baru.
 
 1. Isi `data\guests.csv` di Excel (templat sudah ada, hanya berisi judul kolom `nama,maks_orang`). Nama harus unik; bila ada dua nama sama, bedakan, misalnya "Ahmad (Kantor)".
 2. Masukkan ke database. Perintah ini aman diulang: tamu lama hanya diperbarui kuotanya dan kodenya tetap.

@@ -9,7 +9,7 @@ Cover dengan nama tamu → salam → ayat → mempelai → hitung mundur → Aka
 ## Fitur
 
 - **RSVP:** hadir / tidak / belum pasti, jumlah orang, pilihan sesi, ucapan. Divalidasi di server, idempoten, dengan batas kiriman, tenggat, dan kuota per tamu.
-- **Tautan personal:** `https://domain/u/KODE` menampilkan nama tamu dan membatasi kuota orangnya.
+- **Tautan personal:** `https://domain/?to=Nama&g=KODE` menampilkan nama tamu dan membatasi kuota orangnya.
 - **Panel admin** (`/admin`): rekap per sesi, daftar RSVP, sembunyikan ucapan, daftar tamu + tautan, unduh CSV.
 - **Pratinjau WhatsApp** (Open Graph), kalender (Google Calendar & .ics), musik latar opsional.
 - **Ramah ponsel:** diuji di layar 360 px, menghormati pengaturan "kurangi gerakan".
