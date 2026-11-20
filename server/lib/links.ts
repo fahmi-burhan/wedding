@@ -25,7 +25,7 @@ export function whatsappMessage(link: string, guestName: string): string {
   return [
     `Kepada Yth. ${guestName}`,
     '',
-    `Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i ke ${event.title.toLowerCase()} ${event.couple.short}.`,
+    `Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i ke ${event.titleId.toLowerCase()} ${event.couple.short}.`,
     '',
     'Detail acara & konfirmasi kehadiran:',
     link,

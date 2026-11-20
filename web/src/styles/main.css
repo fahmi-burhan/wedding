@@ -124,12 +124,15 @@
   transition-delay: var(--d, 0ms);
 }
 /*
- * Tirai kiri→kanan untuk judul & nama (seperti teks "Husein" tersingkap di video).
- * Memakai mask-image bergradasi, BUKAN clip-path: IntersectionObserver ikut menghitung clip-path,
- * sehingga elemen yang terpotong 100% dianggap "tidak pernah terlihat" dan animasinya tidak pernah jalan.
- * Gradasi juga memberi tepi sapuan yang lembut.
+ * Tirai kiri→kanan untuk judul & nama. Memakai mask-image bergradasi (bukan clip-path, karena
+ * IntersectionObserver ikut menghitung clip-path). Dua perbaikan agar ujung huruf script TIDAK terpotong:
+ *  1) kotak elemen diperluas dengan padding + margin negatif, sebab ekor huruf (mis. "H", "h") keluar dari kotak teks;
+ *  2) setelah selesai, mask dilepas total (animasi berakhir pada `mask: none`), jadi tidak ada sisa pemotongan.
  */
-.reveal-mask {
+.reveal-mask,
+.reveal-mask-rtl {
+  padding: 0.18em 0.35em;
+  margin: -0.18em -0.35em;
   -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
   mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
   -webkit-mask-size: 300% 100%;
@@ -138,9 +141,19 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: 100% 0;
   mask-position: 100% 0;
-  transition: mask-position 1100ms var(--ease-soft), -webkit-mask-position 1100ms var(--ease-soft);
-  transition-delay: var(--d, 0ms);
 }
+/* Kaligrafi Arab ditulis dari kanan ke kiri → tirainya menyingkap dari kanan. */
+.reveal-mask-rtl {
+  -webkit-mask-image: linear-gradient(270deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(270deg, #000 40%, transparent 60%);
+}
+@keyframes unmask {
+  0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  99% { -webkit-mask-position: 0 0; mask-position: 0 0; }
+  100% { -webkit-mask-image: none; mask-image: none; }
+}
+.reveal-mask.is-in { animation: unmask 1100ms var(--ease-soft) var(--d, 0ms) forwards; }
+.reveal-mask-rtl.is-in { animation: unmask 1300ms var(--ease-soft) var(--d, 0ms) forwards; }
 .reveal-blur {
   opacity: 0;
   filter: blur(6px);
@@ -151,10 +164,6 @@
 .reveal-zoom.is-in {
   opacity: 1;
   transform: none;
-}
-.reveal-mask.is-in {
-  -webkit-mask-position: 0 0;
-  mask-position: 0 0;
 }
 .reveal-blur.is-in {
   opacity: 1;
@@ -231,6 +240,42 @@
   100% { transform: translate(0, 0) rotate(-8deg); }
 }
 
+/* ── Objek penghibur mata (Revisi Client 1): semuanya hanya transform/opacity ─────────── */
+.swing { transform-origin: 50% 0; animation: swing 4.8s ease-in-out infinite alternate; }
+@keyframes swing { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+
+.sway-b { transform-origin: 50% 100%; animation: sway-b 7s ease-in-out infinite alternate; }
+@keyframes sway-b { from { transform: rotate(-1.1deg) scaleY(1); } to { transform: rotate(1.1deg) scaleY(1.025); } }
+
+.bob { animation: bob 5.5s ease-in-out infinite alternate; }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-9px); } }
+
+.twinkle { animation: twinkle 2.8s ease-in-out infinite; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.1) rotate(25deg); }
+}
+
+/* Burung melintas dari kiri ke kanan sambil naik-turun. */
+.fly { animation: fly var(--dur, 22s) linear var(--delay, 0s) infinite; }
+@keyframes fly {
+  0% { transform: translate3d(-70px, 0, 0) scale(var(--s, 1)); opacity: 0; }
+  6% { opacity: 0.85; }
+  25% { transform: translate3d(25vw, -16px, 0) scale(var(--s, 1)); }
+  50% { transform: translate3d(55vw, 10px, 0) scale(var(--s, 1)); }
+  75% { transform: translate3d(85vw, -14px, 0) scale(var(--s, 1)); }
+  94% { opacity: 0.85; }
+  100% { transform: translate3d(112vw, 4px, 0) scale(var(--s, 1)); opacity: 0; }
+}
+
+/* Pita motif pemisah antar bagian: motif bergeser pelan. */
+.pattern-strip {
+  height: 40px;
+  background: #1e2022 url('../assets/scenes/pattern-tile.svg') repeat-x left center / auto 100%;
+  animation: strip-slide 40s linear infinite;
+}
+@keyframes strip-slide { to { background-position-x: 64px; } }
+
 /* Panah kecil "gulir ke bawah". */
 @keyframes nudge {
   0%, 100% { transform: translateY(0); opacity: 0.6; }
@@ -240,7 +285,7 @@
 /* ── Hormati pengaturan "kurangi gerakan" di ponsel tamu ──────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal, .reveal-zoom, .reveal-mask, .reveal-blur {
+  .reveal, .reveal-zoom, .reveal-mask, .reveal-mask-rtl, .reveal-blur {
     opacity: 1 !important;
     transform: none !important;
     clip-path: none !important;
@@ -250,7 +295,8 @@
     transition: none !important;
   }
   .draw-path { stroke-dashoffset: 0 !important; transition: none !important; }
-  .leaf-shadow, .float-soft, .butterfly, .butterfly * { animation: none !important; }
+  .leaf-shadow, .float-soft, .butterfly, .butterfly *, .swing, .sway-b, .bob, .twinkle, .fly, .pattern-strip { animation: none !important; }
+  .fly { display: none !important; }
   .ambient-petals { display: none !important; }
   *, *::before, *::after {
     animation-duration: 1ms !important;

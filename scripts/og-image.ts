@@ -29,7 +29,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
   <image href="data:image/svg+xml;base64,${vine}" xlink:href="data:image/svg+xml;base64,${vine}" x="940" y="-6" width="262" height="170" transform="translate(2142 0) scale(-1 1)"/>
   <image href="data:image/svg+xml;base64,${bouquet}" xlink:href="data:image/svg+xml;base64,${bouquet}" x="-40" y="190" width="520" height="470"/>
   <g font-family="'Playfair Display', Georgia, 'Times New Roman', serif" fill="#1E2022" text-anchor="middle">
-    <text x="835" y="190" font-family="Lato, 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="8" fill="#4A4F52">${esc(event.title.toUpperCase())}</text>
+    <text x="835" y="190" font-family="Lato, 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="8" fill="#4A4F52">${esc(event.titleId.toUpperCase())}</text>
     <line x1="760" y1="222" x2="822" y2="222" stroke="#9CA0A2" stroke-width="2"/>
     <rect x="829" y="216" width="12" height="12" transform="rotate(45 835 222)" fill="#9CA0A2"/>
     <line x1="848" y1="222" x2="910" y2="222" stroke="#9CA0A2" stroke-width="2"/>

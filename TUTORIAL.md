@@ -56,10 +56,13 @@ npm test
 | Nama, orang tua | `couple` |
 | Tanggal & jam sesi | `sessions[].start` (format `2026-12-27T07:00:00+07:00`) |
 | Lokasi & tautan peta | `venue` (`embedUrl` diisi bila ingin peta tersemat) |
-| Ayat, doa, adab, penutup | `verse`, `prayer`, `etiquette`, `closing` |
+| Ayat, salam & kalimat undangan, adab | `verse`, `opening`, `etiquette` |
 | Tenggat RSVP & batas orang | `rsvp.deadline`, `rsvp.defaultMaxPax`, `rsvp.contact` |
 | Mode dinding ucapan | `wishes.mode` (`'langsung'` atau `'moderasi'`) |
 | Teks pratinjau WhatsApp | `og` |
+| Rekening wedding gift | `gift.bankAccounts` (isi `gift: null` untuk menyembunyikan bagiannya) |
+| Pengisi tausiyah (nama kedua masih "Fulan") | `speakers.names` |
+| Teks Infishal Tamm | `notice` |
 
 Setelah mengubah nama, tanggal, atau lokasi, buat ulang gambar pratinjau lalu build:
 ```powershell
@@ -67,19 +70,17 @@ npm run og:image
 npm run build
 ```
 
-### Menambahkan musik latar
-1. Taruh berkas MP3 milik Anda atau yang berlisensi di `web/public/music/`, misalnya `web/public/music/latar.mp3`. Usahakan di bawah 3 MB.
-2. Di `config/event.ts`, ubah `music: null` menjadi:
-   `music: { src: '/music/latar.mp3', title: 'Judul Lagu', credit: 'Pemilik / lisensi' }`
-3. Catat sumber dan lisensinya di [ATTRIBUTION.md](ATTRIBUTION.md).
+### Musik latar
+Musik sudah aktif: berkas `web/public/music/musik.m4a` (dari klien), mulai otomatis saat tamu menekan "Buka Undangan", berulang, dengan tombol jeda/putar di pojok kiri bawah.
+Untuk mengganti lagu, timpa berkas itu (format `.m4a`/`.mp3`, usahakan di bawah 4 MB) atau ubah `music.src` di `config/event.ts`. Untuk mematikan musik, ubah `music` menjadi `null`. Catat sumber dan lisensinya di [ATTRIBUTION.md](ATTRIBUTION.md).
 
-Musik hanya mulai setelah tamu menekan "Buka Undangan", dan tombol jeda selalu terlihat di pojok kanan bawah.
-
-### Mengubah warna/bentuk ornamen
-Ubah palet di [scripts/generate-ornaments.ts](scripts/generate-ornaments.ts) dan token di [web/src/styles/main.css](web/src/styles/main.css), lalu jalankan:
+### Mengubah warna/bentuk ilustrasi
+Ornamen bunga dan sulur digambar oleh [scripts/generate-ornaments.ts](scripts/generate-ornaments.ts), sedangkan siluet, masjid, lampion, cincin, dan pita motif oleh [scripts/generate-scenes.ts](scripts/generate-scenes.ts). Palet ada di [scripts/lib/art.ts](scripts/lib/art.ts) dan token di [web/src/styles/main.css](web/src/styles/main.css). Setelah mengubah:
 ```powershell
 npm run ornaments
+npm run scenes
 ```
+Logo dan kaligrafi dibuat dari gambar di folder `referensi/` (`4.jpeg` dan `7.jpeg`). Bila gambarnya diganti, jalankan `npm run assets`.
 
 ---
 
@@ -287,7 +288,7 @@ config/event.ts        satu-satunya sumber data acara
 shared/                fungsi dipakai server & browser (pembersih nama, format tanggal WIB)
 server/                Express: app.ts, routes/ (public, admin), lib/ (validasi, auth, csv, rate limit), migrations/
 web/                   Vue: index.html (undangan), admin.html (panel), src/sections/, src/components/, src/admin/
-scripts/               admin-password, guests-import, guest-links, db-backup, generate-ornaments, og-image
+scripts/               admin-password, guests-import, guest-links, db-backup, generate-ornaments, generate-scenes, process-assets, og-image
 tests/                 node:test + supertest
 deploy/                contoh systemd & Nginx
 data/                  (tidak di git) wedding.db, guests.csv, guest-links.csv, backups/

@@ -41,3 +41,24 @@ test('data acara: sesi berurutan, tenggat sebelum acara', () => {
   assert.ok(starts[0] < starts[1]);
   assert.ok(Date.parse(event.rsvp.deadline) < starts[0]);
 });
+
+test('revisi klien 1: jam Akad 07.00-09.30 dan Walimah 10.00-13.30 WIB, berurutan tanpa tumpang tindih', () => {
+  const [akad, walimah] = event.sessions;
+  const range = (s: { start: string; end: string }) =>
+    `${formatTime(s.start, event.timezone, 'WIB')} - ${formatTime(s.end, event.timezone, 'WIB')}`;
+  assert.equal(range(akad), '07.00 WIB - 09.30 WIB');
+  assert.equal(range(walimah), '10.00 WIB - 13.30 WIB');
+  assert.ok(Date.parse(akad.end) <= Date.parse(walimah.start));
+  assert.ok(event.sessions.every((s) => Date.parse(s.end) > Date.parse(s.start)));
+});
+
+test('revisi klien 1: rekening gift lengkap & angka saja; pengisi tausiyah kedua "Fulan"', () => {
+  assert.ok(event.gift);
+  assert.equal(event.gift.bankAccounts.length, 2);
+  for (const acc of event.gift.bankAccounts) {
+    assert.match(acc.accountNumber, /^\d{8,16}$/);
+    assert.ok(acc.bank && acc.accountName);
+  }
+  assert.deepEqual(event.speakers?.names, ['Dr. Ir. Rahmat Kurnia, M.Si.', 'Fulan']);
+  assert.match(event.venue.mapsUrl, /^https:\/\/maps\.app\.goo\.gl\//);
+});

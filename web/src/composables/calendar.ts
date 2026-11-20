@@ -14,8 +14,7 @@ import type { EventSession } from '../../../config/event.ts';
 const toUtcStamp = (ms: number) => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 
 function range(s: EventSession) {
-  const start = Date.parse(s.start);
-  return { start, end: start + s.calendarDurationMinutes * 60_000 };
+  return { start: Date.parse(s.start), end: Date.parse(s.end) };
 }
 
 const title = (s: EventSession) => `${s.label} ${event.couple.short}`;

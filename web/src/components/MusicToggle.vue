@@ -1,15 +1,15 @@
 <!--
-  web/src/components/MusicToggle.vue — musik latar + tombol putar/jeda yang selalu terlihat.
+  web/src/components/MusicToggle.vue — musik latar + tombol jeda/putar yang selalu terlihat di pojok layar.
   Dipanggil oleh: App.vue (hanya dirender bila event.music diisi).
-  Memanggil: elemen <audio> bawaan browser.
+  Memanggil: elemen <audio> bawaan browser, ikon lucide.
 
-  Aturan: musik TIDAK pernah diputar otomatis. App.vue memanggil play() di dalam klik "Buka Undangan"
-  (interaksi tamu), karena browser — terutama in-app browser WhatsApp/Instagram — menolak audio tanpa interaksi.
-  Bila tetap ditolak, tombol menampilkan status "jeda" dan tamu bisa menekannya sendiri.
+  Alur: App.vue memanggil play() DI DALAM klik "Buka Undangan" (interaksi tamu), karena browser —
+  terutama in-app browser WhatsApp/Instagram — menolak audio tanpa interaksi. Musik berulang (loop).
+  Bila tetap ditolak, tombol menampilkan ikon "putar" dan tamu bisa menekannya sendiri.
 -->
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Music, VolumeX } from 'lucide-vue-next';
+import { Pause, Play } from 'lucide-vue-next';
 
 const props = defineProps<{ src: string; title: string; visible: boolean }>();
 const audio = ref<HTMLAudioElement | null>(null);
@@ -42,12 +42,18 @@ defineExpose({ play, pause });
   <button
     v-show="visible"
     type="button"
-    class="fixed bottom-5 right-[max(1.25rem,calc(50vw-240px+1.25rem))] z-30 grid size-12 place-items-center rounded-full bg-ink/90 text-paper shadow-lg backdrop-blur transition hover:bg-ink"
+    class="fixed bottom-5 left-[max(1.25rem,calc(50vw-240px+1.25rem))] z-30 grid size-12 place-items-center rounded-full bg-ink/90 text-paper shadow-lg ring-1 ring-white/40 backdrop-blur transition hover:bg-ink"
     :aria-label="playing ? `Jeda musik: ${title}` : `Putar musik: ${title}`"
     :aria-pressed="playing"
     @click="toggle"
   >
-    <Music v-if="playing" class="size-5" :style="{ animation: 'spin-slow 6s linear infinite' }" aria-hidden="true" />
-    <VolumeX v-else class="size-5" aria-hidden="true" />
+    <!-- cincin putus-putus berputar saat musik berbunyi (seperti piringan) -->
+    <span
+      class="absolute inset-[3px] rounded-full border border-dashed border-paper/60"
+      :style="playing ? { animation: 'spin-slow 6s linear infinite' } : {}"
+      aria-hidden="true"
+    />
+    <Pause v-if="playing" class="relative size-5" aria-hidden="true" />
+    <Play v-else class="relative size-5 translate-x-px" aria-hidden="true" />
   </button>
 </template>

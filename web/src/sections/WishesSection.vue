@@ -13,7 +13,6 @@ import { event } from '../../../config/event.ts';
 import { formatDateTime } from '../../../shared/date.ts';
 import { api } from '../composables/api.ts';
 import { wishesVersion } from '../composables/rsvpStore.ts';
-import SectionShell from '../components/SectionShell.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import sprig from '../assets/ornaments/sprig.svg';
 
@@ -57,7 +56,7 @@ const initial = (name: string) => (name.match(/[\p{L}\p{N}]/u)?.[0] ?? '•').to
 </script>
 
 <template>
-  <SectionShell id="ucapan" tone="band" decor="sides" :card="false" :full="false">
+  <div id="ucapan" class="mt-12">
     <SectionLabel script="Ucapan &amp; Doa" text="Doa Restu Para Tamu" />
     <p v-reveal class="-mt-2 mb-6 text-sm font-bold text-ink">{{ total }} ucapan</p>
 
@@ -68,7 +67,7 @@ const initial = (name: string) => (name.match(/[\p{L}\p{N}]/u)?.[0] ?? '•').to
       </p>
       <p v-else-if="!loading && !items.length" class="text-sm text-ink-soft">Belum ada ucapan. Jadilah yang pertama mendoakan kedua mempelai.</p>
 
-      <ul v-else class="mx-2 flex max-h-[34rem] flex-col gap-3 overflow-y-auto rounded-[1.75rem] bg-paper/95 p-4 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35" :class="loading ? 'opacity-60' : ''" tabindex="0" aria-label="Daftar ucapan">
+      <ul v-else class="flex max-h-[34rem] flex-col gap-3 overflow-y-auto rounded-[1.75rem] bg-paper/95 p-4 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35" :class="loading ? 'opacity-60' : ''" tabindex="0" aria-label="Daftar ucapan">
         <li v-for="w in items" :key="w.id" class="flex gap-3 border-b border-line/30 pb-3 last:border-b-0 last:pb-0">
           <!-- Avatar inisial (tanpa foto tamu). -->
           <span class="grid size-10 shrink-0 place-items-center rounded-full bg-cream-tint font-display text-lg font-bold text-ink ring-1 ring-line/40" aria-hidden="true">
@@ -106,5 +105,5 @@ const initial = (name: string) => (name.match(/[\p{L}\p{N}]/u)?.[0] ?? '•').to
     </nav>
 
     <img :src="sprig" alt="" aria-hidden="true" class="mx-auto mt-8 w-44" loading="lazy" />
-  </SectionShell>
+  </div>
 </template>

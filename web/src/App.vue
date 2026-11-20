@@ -1,11 +1,14 @@
 <!--
-  web/src/App.vue — kerangka halaman undangan: sampul → seluruh section → tombol musik.
+  web/src/App.vue — kerangka halaman undangan: sampul → 8 bagian (hero, ayat, mempelai+hitung mundur,
+  waktu & tempat, tausiyah, pemberitahuan+adab, wedding gift, RSVP+ucapan) → footer → tombol musik.
   Dipanggil oleh: web/src/main.ts.
-  Memanggil: semua komponen di web/src/sections/, useGuest.ts, reveal.ts, MusicToggle, PetalBurst.
+  Memanggil: semua komponen di web/src/sections/, useGuest.ts, reveal.ts, MusicToggle, PetalBurst, PatternStrip.
+
+  Antar bagian dipisah PatternStrip (pita motif hitam) + perubahan warna latar yang tegas (putih ↔ cream).
 
   Alur buka undangan:
-  1. Klik "Buka Undangan" → onOpen(): kunci scroll dilepas, musik diputar (masih dalam klik = diizinkan browser),
-     kelopak berjatuhan, animasi scroll mulai aktif.
+  1. Klik "Buka Undangan" → onOpen(): kunci scroll dilepas, MUSIK DIPUTAR (masih dalam klik = diizinkan browser),
+     kelopak berjatuhan, animasi scroll mulai aktif, sampul naik keluar layar.
   2. Setelah transisi selesai, sampul dihapus dari DOM (onGone) dan fokus pindah ke isi undangan.
   sessionStorage mengingat bahwa tamu sudah membuka undangan, jadi saat halaman dimuat ulang
   sampul dilewati (musik tidak otomatis menyala — tamu bisa menekan tombol musik).
@@ -17,21 +20,18 @@ import { loadGuest } from './composables/useGuest.ts';
 import { startReveals } from './composables/reveal.ts';
 import CoverSection from './sections/CoverSection.vue';
 import HeroSection from './sections/HeroSection.vue';
-import OpeningSection from './sections/OpeningSection.vue';
 import VerseSection from './sections/VerseSection.vue';
 import CoupleSection from './sections/CoupleSection.vue';
-import CountdownSection from './sections/CountdownSection.vue';
-import EventsSection from './sections/EventsSection.vue';
+import EventSection from './sections/EventSection.vue';
 import SpeakerSection from './sections/SpeakerSection.vue';
-import LocationSection from './sections/LocationSection.vue';
-import EtiquetteSection from './sections/EtiquetteSection.vue';
+import NoticeSection from './sections/NoticeSection.vue';
+import GiftSection from './sections/GiftSection.vue';
 import RsvpSection from './sections/RsvpSection.vue';
-import WishesSection from './sections/WishesSection.vue';
-import PrayerSection from './sections/PrayerSection.vue';
-import ClosingSection from './sections/ClosingSection.vue';
+import FooterSection from './sections/FooterSection.vue';
 import MusicToggle from './components/MusicToggle.vue';
 import PetalBurst from './components/PetalBurst.vue';
 import AmbientPetals from './components/AmbientPetals.vue';
+import PatternStrip from './components/PatternStrip.vue';
 
 const OPENED_KEY = 'undangan.opened';
 const wasOpened = (() => {
@@ -67,8 +67,8 @@ function onOpen() {
   } catch {
     /* mode privat: abaikan */
   }
-  // Mulai animasi saat sampul mulai memudar, agar tamu melihat section pertama "hidup".
-  window.setTimeout(startReveals, 700);
+  // Mulai animasi saat sampul mulai naik, agar tamu melihat bagian pertama "hidup".
+  window.setTimeout(startReveals, 500);
   window.setTimeout(() => (showPetals.value = false), 4500);
 }
 
@@ -80,10 +80,6 @@ async function onGone() {
 </script>
 
 <template>
-  <!-- Latar tetap berlapis: cat air + bunga pudar, lalu bayangan daun yang bergoyang. -->
-  <div class="backdrop" aria-hidden="true" />
-  <div class="leaf-shadow" aria-hidden="true" />
-
   <CoverSection v-if="coverVisible" @open="onOpen" @gone="onGone" />
   <PetalBurst v-if="showPetals" />
   <AmbientPetals v-if="opened" />
@@ -96,18 +92,22 @@ async function onGone() {
     class="relative z-[2] mx-auto w-full max-w-[480px] overflow-x-clip shadow-[0_0_60px_rgba(30,32,34,0.08)] outline-none"
   >
     <HeroSection />
-    <OpeningSection />
+    <PatternStrip />
     <VerseSection />
+    <PatternStrip />
     <CoupleSection />
-    <CountdownSection />
-    <EventsSection />
+    <PatternStrip />
+    <EventSection />
+    <PatternStrip />
     <SpeakerSection />
-    <LocationSection />
-    <EtiquetteSection />
+    <PatternStrip />
+    <NoticeSection />
+    <PatternStrip />
+    <GiftSection />
+    <PatternStrip />
     <RsvpSection />
-    <WishesSection />
-    <PrayerSection />
-    <ClosingSection />
+    <PatternStrip />
+    <FooterSection />
   </main>
 
   <MusicToggle v-if="event.music" ref="music" :src="event.music.src" :title="event.music.title" :visible="opened" />

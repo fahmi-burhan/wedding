@@ -19,8 +19,14 @@ import { api, ApiError } from '../composables/api.ts';
 import { guest } from '../composables/useGuest.ts';
 import type { RsvpSummary } from '../composables/useGuest.ts';
 import { readLastRsvp, submissionId, wishesVersion, writeLastRsvp } from '../composables/rsvpStore.ts';
-import SectionShell from '../components/SectionShell.vue';
+import BandSection from '../components/BandSection.vue';
 import SectionLabel from '../components/SectionLabel.vue';
+import WishesSection from './WishesSection.vue';
+import Lantern from '../components/Lantern.vue';
+import swagTop from '../assets/ornaments/swag-top.svg';
+import ringsFloral from '../assets/scenes/rings-floral.svg';
+import sparkle from '../assets/scenes/sparkle.svg';
+import bed from '../assets/scenes/bed-bottom.svg';
 
 type Attendance = 'hadir' | 'tidak' | 'ragu';
 const OPTIONS: { value: Attendance; label: string }[] = [
@@ -146,11 +152,24 @@ function edit() {
 </script>
 
 <template>
-  <SectionShell id="rsvp" decor="sides" :card="false" :full="false">
-    <SectionLabel script="Kehadiran" text="Konfirmasi Kehadiran" />
+  <BandSection id="rsvp" tone="cream" labelledby="rsvp-judul">
+    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <Lantern class="left-[3%] top-[70px] z-10" :size="36" />
+    <Lantern class="right-[3%] top-[70px] z-10" :size="38" :delay="-2" />
+    <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[22%] top-[190px] z-10 w-4" />
+    <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[22%] top-[210px] z-10 w-3" style="animation-delay: -1.3s" />
+
+    <div class="relative z-[5] mx-auto max-w-[380px] px-4 pb-44 pt-[140px] text-center">
+    <!-- Kartu lengkung: gambar bunga & cincin di puncaknya (tata letak seperti website referensi) -->
+    <div class="relative rounded-b-[2rem] rounded-t-[999px] bg-paper/95 px-5 pb-8 pt-10 shadow-[0_14px_44px_rgba(30,32,34,0.14)] ring-1 ring-line/35">
+      <div class="pointer-events-none absolute inset-[7px] rounded-b-[1.6rem] rounded-t-[999px] border border-line/40" aria-hidden="true" />
+      <img v-reveal:zoom :src="ringsFloral" alt="" aria-hidden="true" class="bob relative mx-auto -mt-2 w-[250px] select-none" />
+      <div class="relative">
+    <SectionLabel script="RSVP" text="Konfirmasi Kehadiran" />
+    <h2 id="rsvp-judul" class="sr-only">Konfirmasi Kehadiran</h2>
 
     <!-- Form ditutup (tenggat lewat) -->
-    <div v-if="!open && !saved" v-reveal class="mx-2 rounded-[1.75rem] bg-paper/95 p-6 text-[15px] shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35">
+    <div v-if="!open && !saved" v-reveal class="rounded-2xl bg-cream-tint/60 p-5 text-[15px]">
       <p class="font-bold text-ink">Konfirmasi kehadiran telah ditutup.</p>
       <p class="mt-2 text-ink-soft">Batas konfirmasi: {{ deadlineLabel }}. Terima kasih atas perhatian Bapak/Ibu/Saudara/i.</p>
       <a
@@ -163,7 +182,7 @@ function edit() {
     </div>
 
     <!-- Ringkasan jawaban yang tersimpan -->
-    <div v-else-if="saved && !editing" class="mx-2 rounded-[1.75rem] bg-paper/95 p-6 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35" aria-live="polite">
+    <div v-else-if="saved && !editing" class="rounded-2xl bg-cream-tint/60 p-5 text-left" aria-live="polite">
       <p ref="resultHeading" tabindex="-1" class="flex items-center gap-2 font-display text-xl font-bold text-ink">
         <Check class="size-5 shrink-0" aria-hidden="true" />
         Terima kasih, {{ saved.name }}
@@ -192,7 +211,7 @@ function edit() {
     </div>
 
     <!-- Form -->
-    <form v-else v-reveal="200" class="relative mx-2 rounded-[1.75rem] bg-paper/95 p-5 text-left shadow-[0_12px_40px_rgba(30,32,34,0.12)] ring-1 ring-line/35 sm:p-6" novalidate @submit.prevent="submit">
+    <form v-else v-reveal="200" class="relative text-left" novalidate @submit.prevent="submit">
       <p class="mb-5 text-center text-sm text-ink-soft">Mohon konfirmasi sebelum <strong class="text-ink">{{ deadlineLabel }}</strong>.</p>
 
       <label for="rsvp-nama" class="mb-1.5 block text-sm font-bold">Nama</label>
@@ -284,5 +303,12 @@ function edit() {
         {{ submitting ? 'Mengirim…' : error ? 'Coba kirim lagi' : saved ? 'Simpan perubahan' : 'Kirim Konfirmasi' }}
       </button>
     </form>
-  </SectionShell>
+      </div>
+    </div>
+
+    <WishesSection />
+    </div>
+
+    <img :src="bed" alt="" aria-hidden="true" class="sway-b pointer-events-none absolute inset-x-0 bottom-0 z-[6] w-full select-none object-cover object-bottom" style="height: 160px" />
+  </BandSection>
 </template>

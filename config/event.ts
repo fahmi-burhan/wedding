@@ -6,11 +6,12 @@
  * Memanggil: tidak ada (berkas data murni).
  *
  * Aturan:
- * - Semua teks pribadi/sakral di bawah ini diambil dari video undangan resmi pasangan
- *   (referensi/undangan-husein-zahroh.mp4) dan sudah dikonfirmasi pemilik acara.
- *   Bila ada revisi, ubah DI SINI saja — komponen tidak perlu disentuh.
- * - Waktu ditulis ISO 8601 lengkap dengan offset +07:00 (WIB) agar hitung mundur,
- *   tenggat, dan kalender tidak bergeser walau tamu berada di zona waktu lain.
+ * - Teks pribadi/sakral di bawah ini berasal dari video undangan resmi pasangan, dari catatan revisi klien
+ *   (referensi/REFERENSI.md), atau dari gambar referensi klien. Yang bertanda "PERLU DIPERIKSA" harus
+ *   dibaca ulang oleh orang yang paham sebelum undangan disebar.
+ * - Revisi data dilakukan DI SINI saja — komponen tidak perlu disentuh.
+ * - Waktu ditulis ISO 8601 lengkap dengan offset +07:00 (WIB) agar hitung mundur, tenggat, dan kalender
+ *   tidak bergeser walau tamu berada di zona waktu lain.
  * - Nilai `null` berarti fitur dinonaktifkan (bukan diisi data contoh).
  */
 
@@ -19,43 +20,56 @@ export type SessionKey = 'akad' | 'walimah';
 export interface EventSession {
   key: SessionKey;
   label: string;
-  labelArabic: string;
   /** Waktu mulai (ISO + offset WIB). */
   start: string;
-  /** Keterangan setelah jam, persis seperti di video. null = tidak ada. */
-  endNote: string | null;
-  /**
-   * ASUMSI: durasi hanya untuk tombol "Tambah ke Kalender" (kalender wajib punya jam selesai).
-   * Tidak ditampilkan di halaman.
-   */
-  calendarDurationMinutes: number;
+  /** Waktu selesai (ISO + offset WIB). Tampil di halaman dan dipakai untuk kalender. */
+  end: string;
 }
 
 export interface EtiquetteItem {
-  /** Nama ikon yang dipetakan di web/src/sections/EtiquetteSection.vue */
+  /** Nama ikon yang dipetakan di web/src/sections/NoticeSection.vue */
   icon: 'utensils' | 'clock' | 'hand-heart' | 'shirt' | 'camera-off';
   text: string;
   /** true = larangan, diberi penekanan visual (garis tegas). */
   emphasis?: boolean;
 }
 
+export interface BankAccount {
+  bank: string;
+  /** Path logo bank (mis. '/img/bank-jago.png'). Kosong = tampil teks nama bank saja. */
+  image: string;
+  accountNumber: string;
+  accountName: string;
+}
+
 export const event = {
-  /** Label kecil di cover. */
-  title: 'Undangan Walimah',
+  /** Label di sampul (huruf kapital semua). */
+  title: 'Wedding Invitation',
+  /** Label kecil yang dipakai di pratinjau tautan & panel admin. */
+  titleId: 'Undangan Walimah',
 
   couple: {
-    /** Nama panggilan yang tampil di cover & penutup (sesuai video). */
+    /** Nama panggilan yang tampil di hero & footer. */
     short: 'Husein & Zahroh',
     groom: {
       shortName: 'Husein',
+      /** Nama di sampul, gaya kaligrafi (font mengikuti referensi foto no. 6). PERLU DIPERIKSA. */
+      arabicName: 'حسين',
       fullName: 'Achmad Hosein Suwandi',
       parents: 'Putra dari Bapak Buradin\ndan Ibu Sitti Komariyah',
     },
     bride: {
       shortName: 'Zahroh',
+      /** PERLU DIPERIKSA: gambar referensi no. 6 menulis "الزهرة" (ejaan akhir ـة/ـه bisa berbeda). */
+      arabicName: 'الزهرة',
       fullName: 'Nushoibah AzZahroh',
       parents: 'Putri dari Bapak Abdul Fanani\ndan Ibu Wahyuningsih (Almh)',
     },
+  },
+
+  cover: {
+    /** Permintaan maaf di bawah nama tamu (kalimat buatan, bukan dari video). */
+    apology: 'Mohon maaf apabila terdapat kekeliruan dalam penulisan nama dan gelar.',
   },
 
   /** Zona waktu acara (IANA). Semua tampilan jam memakai zona ini. */
@@ -66,25 +80,22 @@ export const event = {
     {
       key: 'akad',
       label: 'Akad Nikah',
-      labelArabic: 'عقد الزواج',
       start: '2026-12-27T07:00:00+07:00',
-      endNote: 's/d selesai',
-      calendarDurationMinutes: 120,
+      end: '2026-12-27T09:30:00+07:00',
     },
     {
       key: 'walimah',
       label: 'Walimah',
-      labelArabic: 'وليمة العرس',
       start: '2026-12-27T10:00:00+07:00',
-      endNote: null,
-      calendarDurationMinutes: 180,
+      end: '2026-12-27T13:30:00+07:00',
     },
   ] satisfies EventSession[] as EventSession[],
 
-  speaker: {
+  /** Pengisi tausiyah. Nama kedua masih "Fulan" sampai klien memastikan. */
+  speakers: {
     label: 'Pengisi Tausiyah',
-    name: 'Dr. Ir. Rahmat Kurnia, M.Si.',
-  } as { label: string; name: string } | null,
+    names: ['Dr. Ir. Rahmat Kurnia, M.Si.', 'Fulan'],
+  } as { label: string; names: string[] } | null,
 
   venue: {
     name: 'Masjid Raya Al-Muttaqin',
@@ -98,6 +109,7 @@ export const event = {
     embedUrl: null as string | null,
   },
 
+  /** Salam pembuka + kalimat undangan (dari video). */
   opening: {
     salamArabic: 'السلام عليكم ورحمة الله وبركاته',
     lines: [
@@ -107,9 +119,16 @@ export const event = {
     ],
   },
 
-  /** Teks sakral — hanya dari pemilik acara (video). */
+  /**
+   * Ayat Ar-Rum: 21. Teks Arab dibaca dari gambar referensi klien no. 7 (tepi kiri-kanan baris dipisah
+   * sesuai tampilan di undangan), terjemahan dari video. PERLU DIPERIKSA ULANG (harakat & tanda waqaf).
+   */
   verse: {
     label: 'Firman Allah',
+    arabicLines: [
+      'وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا',
+      'وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِقَوْمٍ يَتَفَكَّرُونَ',
+    ],
     lines: [
       'Dan di antara tanda-tanda (kebesaran)-Nya',
       'ialah Dia menciptakan pasangan-pasangan',
@@ -124,6 +143,22 @@ export const event = {
     source: 'QS. Ar-Rum: 21',
   },
 
+  /**
+   * Pemberitahuan penting: konsep Infishal Tamm. Teks penjelasan ditulis ulang oleh pengembang
+   * (bukan salinan dari website referensi) — PERLU DIPERIKSA oleh klien/ustadz sebelum disebar.
+   */
+  notice: {
+    title: 'Pemberitahuan Penting',
+    concept: 'Konsep Walimah Infishal Tamm',
+    arabic: 'الانفصال التام',
+    transliteration: 'Al-Infishal at-Tamm',
+    paragraph:
+      'Infishal tamm berarti pemisahan penuh antara tamu laki-laki dan perempuan selama acara, ' +
+      'mulai dari jalur masuk, tempat duduk, hingga hidangan, agar walimah berlangsung dengan adab dan ' +
+      'terjaga dari hal-hal yang tidak diinginkan. Mohon Bapak/Ibu berkenan mengikuti arahan panitia ' +
+      'yang akan mengantar ke area yang sesuai.',
+  },
+
   etiquette: {
     title: 'Adab Menghadiri Walimah',
     items: [
@@ -135,30 +170,28 @@ export const event = {
     ] satisfies EtiquetteItem[] as EtiquetteItem[],
   },
 
-  /** Teks sakral — hanya dari pemilik acara (video). */
-  prayer: {
-    label: 'Doa untuk Pengantin',
-    arabic: 'بَارَكَ اللَّهُ لَكَ، وَبَارَكَ عَلَيْكَ، وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ',
+  /** Wedding gift. Data rekening diberikan langsung oleh klien (REFERENSI.md, Revisi Client 1). */
+  gift: {
+    title: 'Wedding Gift',
     lines: [
-      'Semoga Allah memberkahimu',
-      'di waktu bahagia dan memberkahimu',
-      'di waktu susah, serta semoga Allah',
-      'mempersatukan kalian berdua',
-      'dalam kebaikan.',
+      'Doa restu Bapak/Ibu/Saudara/i sudah merupakan karunia yang sangat berarti bagi kami.',
+      'Bila berkenan memberikan tanda kasih, dapat disalurkan melalui rekening berikut.',
     ],
-    source: 'HR. Abu Dawud no. 2130',
-  },
-
-  closing: {
-    lines: [
-      'Merupakan suatu kehormatan',
-      'dan kebahagiaan bagi kami',
-      'apabila Bapak/Ibu/Saudara/i',
-      'berkenan hadir dan memberikan',
-      'doa restu kepada kedua mempelai.',
-    ],
-    salamArabic: 'والسلام عليكم ورحمة الله وبركاته',
-  },
+    bankAccounts: [
+      {
+        bank: 'Bank JAGO Syariah',
+        image: '',
+        accountNumber: '509438120136',
+        accountName: 'Ach Hosein Suwandi',
+      },
+      {
+        bank: 'Bank Syariah Indonesia',
+        image: '',
+        accountNumber: '3421261390',
+        accountName: 'Nushoibah Azzahroh',
+      },
+    ] as BankAccount[],
+  } as { title: string; lines: string[]; bankAccounts: BankAccount[] } | null,
 
   rsvp: {
     /** Tenggat RSVP: H-7 (disetujui pemilik acara). Server menolak kiriman setelah waktu ini. */
@@ -176,11 +209,13 @@ export const event = {
   },
 
   /**
-   * Musik latar. null = fitur nonaktif.
-   * Untuk mengaktifkan: taruh berkas milik/berlisensi di web/public/music/ lalu isi, contoh:
-   * { src: '/music/nama-berkas.mp3', title: 'Judul', credit: 'Pemilik / lisensi' }
+   * Musik latar (berkas dari klien). Mulai otomatis saat tamu menekan "Buka Undangan";
+   * tombol jeda selalu terlihat di pojok layar. null = fitur nonaktif.
+   * Lisensi lagu belum diketahui → PERLU CEK LISENSI (lihat ATTRIBUTION.md).
    */
-  music: null as { src: string; title: string; credit: string } | null,
+  music: { src: '/music/musik.m4a', title: 'Musik latar', credit: 'Disediakan klien' } as
+    | { src: string; title: string; credit: string }
+    | null,
 
   /** Pratinjau tautan (WhatsApp, Telegram, dll). Gambar dibuat oleh `npm run og:image`. */
   og: {

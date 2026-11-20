@@ -18,6 +18,7 @@ import type { Directive } from 'vue';
 const VARIANTS: Record<string, string> = {
   up: 'reveal',
   mask: 'reveal-mask',
+  rtl: 'reveal-mask-rtl',
   zoom: 'reveal-zoom',
   blur: 'reveal-blur',
   draw: 'reveal-draw',
