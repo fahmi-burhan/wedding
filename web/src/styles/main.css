@@ -244,7 +244,12 @@
 .swing { transform-origin: 50% 0; animation: swing 4.8s ease-in-out infinite alternate; }
 @keyframes swing { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
 
-.sway-b { transform-origin: 50% 100%; animation: sway-b 7s ease-in-out infinite alternate; }
+.sway-b {
+  transform-origin: 50% 100%;
+  animation: sway-b 7s ease-in-out infinite alternate;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 26%);
+}
 @keyframes sway-b { from { transform: rotate(-1.1deg) scaleY(1); } to { transform: rotate(1.1deg) scaleY(1.025); } }
 
 .bob { animation: bob 5.5s ease-in-out infinite alternate; }
@@ -268,13 +273,30 @@
   100% { transform: translate3d(112vw, 4px, 0) scale(var(--s, 1)); opacity: 0; }
 }
 
-/* Pita motif pemisah antar bagian: motif bergeser pelan. */
-.pattern-strip {
-  height: 40px;
-  background: #1e2022 url('../assets/scenes/pattern-tile.svg') repeat-x left center / auto 100%;
-  animation: strip-slide 40s linear infinite;
+/* Hiasan bunga yang menggantung dari tepi atas berayun pelan (poros di tepi atas). */
+.sway-t { transform-origin: 50% 0; animation: sway-t 8s ease-in-out infinite alternate; }
+@keyframes sway-t { from { transform: rotate(-0.9deg); } to { transform: rotate(0.9deg); } }
+
+/* Napas halus (potret mempelai): membesar-mengecil sangat sedikit. */
+.breathe { animation: breathe 6s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@keyframes breathe { from { transform: scale(1); } to { transform: scale(1.025); } }
+
+/* Partikel cahaya naik pelan (debu bercahaya). */
+@keyframes mote-rise {
+  0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translate3d(var(--dx, 16px), calc(var(--rise, 260px) * -1), 0) scale(1.1); opacity: 0; }
 }
-@keyframes strip-slide { to { background-position-x: 64px; } }
+
+/* Denyut cincin di sekitar ikon hadiah. */
+@keyframes ping-soft {
+  0% { transform: scale(1); opacity: 0.55; }
+  80%, 100% { transform: scale(1.7); opacity: 0; }
+}
+.ping-soft { animation: ping-soft 2.6s ease-out infinite; }
+
+/* Latar bergeser sedikit mengikuti scroll (parallax) memakai --sy dari App.vue. */
+.parallax-slow { transform: translate3d(0, calc(var(--sy, 0) * -0.04px), 0); will-change: transform; }
 
 /* Panah kecil "gulir ke bawah". */
 @keyframes nudge {
@@ -282,24 +304,25 @@
   50% { transform: translateY(6px); opacity: 1; }
 }
 
-/* ── Hormati pengaturan "kurangi gerakan" di ponsel tamu ──────────────────────────── */
+/* ── Tamu yang memilih "kurangi gerakan" di perangkatnya ───────────────────────────────────
+ * Gerak BESAR (melintas layar, jatuh, meluncur, tirai, kabur) diganti fade sederhana; gerak ambient yang halus
+ * (bunga bergoyang, lampion berayun, bintang berkelip) tetap berjalan dengan amplitudo lebih kecil, sehingga
+ * undangan tetap hidup tanpa membuat tamu yang sensitif terhadap gerakan merasa tidak nyaman.
+ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal, .reveal-zoom, .reveal-mask, .reveal-mask-rtl, .reveal-blur {
-    opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
     clip-path: none !important;
     -webkit-mask-image: none !important;
     mask-image: none !important;
-    filter: none !important;
-    transition: none !important;
+    animation: none !important;
+    transition: opacity 600ms ease-out var(--d, 0ms) !important;
   }
   .draw-path { stroke-dashoffset: 0 !important; transition: none !important; }
-  .leaf-shadow, .float-soft, .butterfly, .butterfly *, .swing, .sway-b, .bob, .twinkle, .fly, .pattern-strip { animation: none !important; }
-  .fly { display: none !important; }
-  .ambient-petals { display: none !important; }
-  *, *::before, *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-  }
+  .swing { animation-duration: 9s !important; }
+  .sway-b, .sway-t, .bob, .breathe { animation-duration: 14s !important; }
+  .fly, .ambient-petals, .parallax-slow { display: none !important; }
+  .parallax-slow { transform: none !important; }
 }

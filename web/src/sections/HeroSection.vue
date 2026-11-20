@@ -3,7 +3,7 @@
   lalu nama panggilan (script). Tanpa tanggal. Ramai dan bergerak: lampion berayun, burung melintas,
   bulan sabit melayang, bintang berkelip, kupu-kupu, masjid & hamparan bunga bergoyang di dasar.
   Dipanggil oleh: App.vue.
-  Memanggil: config/event.ts, assets/brand/daawa-zifaf.png (diambil dari gambar referensi klien no. 7), Birds, Lantern, Butterfly.
+  Memanggil: config/event.ts, assets/brand/daawa-zifaf.svg (kaligrafi vektor buatan sendiri, lihat scripts/generate-calligraphy.ts), Birds, Lantern, Butterfly.
 -->
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next';
@@ -12,8 +12,9 @@ import BandSection from '../components/BandSection.vue';
 import Birds from '../components/Birds.vue';
 import Butterfly from '../components/Butterfly.vue';
 import Lantern from '../components/Lantern.vue';
+import Motes from '../components/Motes.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
-import calligraphy from '../assets/brand/daawa-zifaf.png';
+import calligraphy from '../assets/brand/daawa-zifaf.svg';
 import backdrop from '../assets/ornaments/backdrop.svg';
 import swagTop from '../assets/ornaments/swag-top.svg';
 import mosque from '../assets/scenes/mosque.svg';
@@ -25,10 +26,11 @@ import sparkle from '../assets/scenes/sparkle.svg';
 <template>
   <BandSection id="beranda" tone="paper" full labelledby="beranda-nama">
     <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
-    <img :src="mosque" alt="" aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-[110px] -z-[5] w-full opacity-80" />
+    <img :src="mosque" alt="" aria-hidden="true" class="parallax-slow pointer-events-none absolute inset-x-0 bottom-[110px] -z-[5] w-full opacity-80" />
 
     <Birds />
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[118%] max-w-none -translate-x-1/2 select-none" />
+    <Motes :count="18" :seed="7" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[118%] max-w-none -translate-x-1/2 select-none" />
     <Lantern class="left-[6%] top-[60px] z-10" :size="52" />
     <Lantern class="right-[6%] top-[60px] z-10" :size="44" :delay="-2.4" />
     <img :src="crescent" alt="" aria-hidden="true" class="bob pointer-events-none absolute right-[22%] top-[20%] z-[6] w-14" />
@@ -46,14 +48,14 @@ import sparkle from '../assets/scenes/sparkle.svg';
         :src="calligraphy"
         alt="دعوة زفاف"
         lang="ar"
-        class="w-[min(68%,250px)] select-none"
+        class="w-[min(82%,320px)] select-none"
         style="filter: drop-shadow(0 2px 8px rgba(248, 247, 244, 0.9))"
       />
 
       <h1
         id="beranda-nama"
         v-reveal:mask="500"
-        class="mt-16 whitespace-nowrap font-script text-[clamp(2.5rem,13.2vw,3.5rem)] leading-[1.3] text-ink"
+        class="mt-20 whitespace-nowrap font-script text-[clamp(2.5rem,13.2vw,3.5rem)] leading-[1.3] text-ink"
       >
         {{ event.couple.groom.shortName }}
         <span class="font-display text-[0.5em] italic text-ink-soft">&amp;</span>

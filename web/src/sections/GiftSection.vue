@@ -10,6 +10,7 @@ import { ref } from 'vue';
 import { Check, ChevronDown, Copy, Gift } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import Motes from '../components/Motes.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import swagTop from '../assets/ornaments/swag-top.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
@@ -31,16 +32,18 @@ const spaced = (n: string) => n.replace(/(.{4})/g, '$1 ').trim();
 </script>
 
 <template>
-  <BandSection v-if="event.gift" id="gift" tone="paper" labelledby="gift-judul">
+  <BandSection v-if="event.gift" id="gift" tone="paper" from="cream" labelledby="gift-judul">
+    <Motes :count="12" :seed="17" />
     <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[14%] top-[34%] z-10 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[16%] top-[44%] z-10 w-3" style="animation-delay: -1.2s" />
 
     <div class="relative z-[5] mx-auto max-w-[380px] px-4 pb-24 pt-[150px] text-center">
       <div class="relative rounded-[2rem] bg-paper/80 px-6 pb-10 pt-9 shadow-[0_14px_44px_rgba(30,32,34,0.14)] ring-1 ring-white/70">
-        <div class="bob mx-auto mb-2 grid size-14 place-items-center rounded-full bg-ink text-paper shadow-md" aria-hidden="true">
-          <Gift class="size-6" />
+        <div class="relative mx-auto mb-2 size-14" aria-hidden="true">
+          <span class="ping-soft absolute inset-0 rounded-full border border-ink/40" />
+          <div class="bob relative grid size-full place-items-center rounded-full bg-ink text-paper shadow-md"><Gift class="size-6" /></div>
         </div>
         <SectionLabel script="Wedding Gift" :text="event.gift.title" />
         <p id="gift-judul" class="sr-only">{{ event.gift.title }}</p>

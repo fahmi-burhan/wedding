@@ -80,7 +80,7 @@ Ornamen bunga dan sulur digambar oleh [scripts/generate-ornaments.ts](scripts/ge
 npm run ornaments
 npm run scenes
 ```
-Logo dan kaligrafi dibuat dari gambar di folder `referensi/` (`4.jpeg` dan `7.jpeg`). Bila gambarnya diganti, jalankan `npm run assets`.
+Logo dibuat dari `referensi/4.jpeg` (jalankan `npm run assets` bila gambarnya diganti). Kaligrafi "دعوة زفاف" dibuat dengan kode (`npm run calligraphy`, silakan ubah ukuran/gaya di `scripts/generate-calligraphy.ts`).
 
 ---
 
@@ -288,7 +288,7 @@ config/event.ts        satu-satunya sumber data acara
 shared/                fungsi dipakai server & browser (pembersih nama, format tanggal WIB)
 server/                Express: app.ts, routes/ (public, admin), lib/ (validasi, auth, csv, rate limit), migrations/
 web/                   Vue: index.html (undangan), admin.html (panel), src/sections/, src/components/, src/admin/
-scripts/               admin-password, guests-import, guest-links, db-backup, generate-ornaments, generate-scenes, process-assets, og-image
+scripts/               admin-password, guests-import, guest-links, db-backup, generate-ornaments, generate-scenes, generate-calligraphy, process-assets, og-image
 tests/                 node:test + supertest
 deploy/                contoh systemd & Nginx
 data/                  (tidak di git) wedding.db, guests.csv, guest-links.csv, backups/

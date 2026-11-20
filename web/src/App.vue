@@ -4,7 +4,8 @@
   Dipanggil oleh: web/src/main.ts.
   Memanggil: semua komponen di web/src/sections/, useGuest.ts, reveal.ts, MusicToggle, PetalBurst, PatternStrip.
 
-  Antar bagian dipisah PatternStrip (pita motif hitam) + perubahan warna latar yang tegas (putih ↔ cream).
+  Antar bagian TIDAK ada garis pemisah: warna latar putih ↔ cream berpindah lewat gradasi halus (BandSection `from`),
+  dan hiasan bunga bagian atas/bawah saling bertumpuk melewati batas.
 
   Alur buka undangan:
   1. Klik "Buka Undangan" → onOpen(): kunci scroll dilepas, MUSIK DIPUTAR (masih dalam klik = diizinkan browser),
@@ -14,7 +15,7 @@
   sampul dilewati (musik tidak otomatis menyala — tamu bisa menekan tombol musik).
 -->
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { event } from '../../config/event.ts';
 import { loadGuest } from './composables/useGuest.ts';
 import { startReveals } from './composables/reveal.ts';
@@ -31,7 +32,6 @@ import FooterSection from './sections/FooterSection.vue';
 import MusicToggle from './components/MusicToggle.vue';
 import PetalBurst from './components/PetalBurst.vue';
 import AmbientPetals from './components/AmbientPetals.vue';
-import PatternStrip from './components/PatternStrip.vue';
 
 const OPENED_KEY = 'undangan.opened';
 const wasOpened = (() => {
@@ -48,13 +48,27 @@ const showPetals = ref(false);
 const main = ref<HTMLElement | null>(null);
 const music = ref<InstanceType<typeof MusicToggle> | null>(null);
 
+// Parallax ringan: posisi scroll disimpan sebagai variabel CSS --sy (px) yang dipakai hiasan latar.
+let ticking = false;
+function onScroll() {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    document.documentElement.style.setProperty('--sy', String(Math.round(window.scrollY)));
+    ticking = false;
+  });
+}
+
 onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true });
   loadGuest();
   if (wasOpened) {
     document.documentElement.classList.remove('is-locked');
     startReveals();
   }
 });
+
+onUnmounted(() => window.removeEventListener('scroll', onScroll));
 
 function onOpen() {
   opened.value = true;
@@ -92,21 +106,13 @@ async function onGone() {
     class="relative z-[2] mx-auto w-full max-w-[480px] overflow-x-clip shadow-[0_0_60px_rgba(30,32,34,0.08)] outline-none"
   >
     <HeroSection />
-    <PatternStrip />
     <VerseSection />
-    <PatternStrip />
     <CoupleSection />
-    <PatternStrip />
     <EventSection />
-    <PatternStrip />
     <SpeakerSection />
-    <PatternStrip />
     <NoticeSection />
-    <PatternStrip />
     <GiftSection />
-    <PatternStrip />
     <RsvpSection />
-    <PatternStrip />
     <FooterSection />
   </main>
 

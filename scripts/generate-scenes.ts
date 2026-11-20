@@ -5,7 +5,7 @@
  * Dipanggil oleh: pengguna (terminal), sekali atau saat ingin mengubah bentuk/warna.
  * Memanggil: scripts/lib/art.ts (bunga, daun, sulur), node:fs.
  *
- * Isi: pita motif pemisah, siluet pria (kopyah/tarbusy Azhar) & muslimah, cincin + bunga, masjid,
+ * Isi: potret pria (kopyah/tarbusy Azhar) & muslimah, cincin + bunga, masjid,
  * lampion, bulan sabit & kerlip bintang, mushaf di rehal, burung, hamparan bunga bawah.
  * Semua digambar sendiri (milik proyek) dengan palet klien: putih/cream, hitam, biru HANYA untuk bunga.
  */
@@ -23,26 +23,6 @@ const INK = C.ink;
 /** SVG tanpa filter cat air (objek geometris yang tegas). */
 const plain = (w: number, h: number, body: string, defs = '') =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><defs>${defs}</defs>${body}</svg>\n`;
-
-// ── 1. Pita motif pemisah antar bagian (ubin berulang, tegas seperti pita motif di referensi) ──
-{
-  const W = 64;
-  const H = 46;
-  const cx = W / 2;
-  const cy = H / 2;
-  const star = (r: number, stroke: string, sw: number) =>
-    `<rect x="${cx - r}" y="${cy - r}" width="${2 * r}" height="${2 * r}" fill="none" stroke="${stroke}" stroke-width="${sw}"/>` +
-    `<rect x="${cx - r}" y="${cy - r}" width="${2 * r}" height="${2 * r}" fill="none" stroke="${stroke}" stroke-width="${sw}" transform="rotate(45 ${cx} ${cy})"/>`;
-  const body =
-    `<rect width="${W}" height="${H}" fill="${INK}"/>` +
-    star(13, C.cream[0], 1.4) +
-    star(7, C.cream[1], 1) +
-    `<circle cx="${cx}" cy="${cy}" r="2" fill="${C.cream[0]}"/>` +
-    // belah ketupat penyambung di batas ubin
-    `<path d="M0 ${cy} l5 -5 l5 5 l-5 5Z M${W} ${cy} l-5 -5 l-5 5 l5 5Z" fill="none" stroke="${C.cream[0]}" stroke-width="1"/>` +
-    `<path d="M0 3H${W}M0 ${H - 3}H${W}" stroke="${C.cream[0]}" stroke-opacity=".55" stroke-width="1"/>`;
-  write('pattern-tile.svg', plain(W, H, body));
-}
 
 // ── 2. Masjid (siluet berlapis) ────────────────────────────────────────────────────────────
 {
@@ -192,52 +172,94 @@ const plain = (w: number, h: number, body: string, defs = '') =>
   write('rings-floral.svg', svg(320, 240, body, defs));
 }
 
-// ── 7. Siluet pria (jubah, kopyah/tarbusy khas Azhar, sorban melingkar) ───────────────────
-{
-  const defs = `<linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${INK}"/><stop offset=".7" stop-color="${INK}"/><stop offset="1" stop-color="#3B4144"/></linearGradient>
-  <mask id="cut"><rect width="200" height="340" fill="#fff"/>
-    <path d="M74 64 Q100 74 126 64" fill="none" stroke="#000" stroke-width="2.4"/>
-    <path d="M96 120 L100 134 L104 120" fill="none" stroke="#000" stroke-width="2.4"/>
-    <path d="M58 150 C52 180 52 205 56 226" fill="none" stroke="#000" stroke-width="2.6"/>
-    <path d="M142 150 C148 180 148 205 144 226" fill="none" stroke="#000" stroke-width="2.6"/>
-    <path d="M90 232 Q100 238 110 232" fill="none" stroke="#000" stroke-width="2.2"/>
-    <path d="M100 238 V330" fill="none" stroke="#000" stroke-width="1.6" stroke-opacity=".9"/>
-  </mask>`;
+// ── 7 & 8. Potret setengah dada (siluet profil gaya cameo) dalam bingkai lengkung + karangan bunga ─────
+/** Bingkai lengkung + latar lembut + karangan bunga di dasar; `fig` = isi (siluet) yang digambar di antaranya. */
+function portrait(fig: string, seed: number): string {
+  const arch = 'M16 274 V122 A104 104 0 0 1 224 122 V274 Q224 298 200 298 H40 Q16 298 16 274Z';
+  const defs =
+    WATERCOLOR_FILTER +
+    `<linearGradient id="plate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="${C.cream[2]}"/><stop offset="1" stop-color="${C.cream[1]}"/></linearGradient>
+     <linearGradient id="ink" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="300"><stop offset="0" stop-color="${INK}"/><stop offset=".62" stop-color="#262A2D"/><stop offset="1" stop-color="#3E4549"/></linearGradient>
+     <radialGradient id="aura" cx="50%" cy="38%" r="48%"><stop offset="0" stop-color="${C.blue[4]}" stop-opacity=".75"/><stop offset="1" stop-color="${C.blue[4]}" stop-opacity="0"/></radialGradient>
+     <clipPath id="clip"><path d="${arch}"/></clipPath>`;
+  const rnd = prng(seed);
+  let leaves = '';
+  for (let i = 0; i < 14; i++) leaves += leaf(14 + i * 15.5 + (rnd() - 0.5) * 8, 306, 44 + rnd() * 40, (rnd() - 0.5) * 100, pick(rnd, C.leaf));
+  const flowers =
+    leaves +
+    hydrangea(40, 284, 44, seed + 1, 34) +
+    hydrangea(204, 286, 44, seed + 2, 34) +
+    rose(98, 292, 22, 10) +
+    rose(146, 296, 20, 50) +
+    hydrangea(120, 306, 36, seed + 3, 26) +
+    blossom(30, 238, 7) + blossom(214, 240, 7, true) + blossom(64, 256, 6, true) + blossom(180, 258, 6);
   const body =
-    `<g mask="url(#cut)" fill="url(#fill)">` +
-    // tarbusy: kerucut terpancung (lebih lebar di bawah), sorban tebal melilit pangkalnya, jumbai di atas
-    `<path d="M76 58 L88 20 Q89 15 94 15 H106 Q111 15 112 20 L124 58Z"/>` +
-    `<path d="M72 60 Q72 48 86 46 H114 Q128 48 128 60 Q128 70 114 68 H86 Q72 70 72 60Z"/>` +
-    `<path d="M100 15 Q116 8 124 22 q4 10 -2 22" fill="none" stroke="${INK}" stroke-width="2.6"/><circle cx="122" cy="46" r="3.2"/>` +
-    `<path d="M124 62 q14 8 12 30 q-4 -16 -14 -20Z"/>` +
-    // kepala, leher, jenggot tipis
-    `<ellipse cx="100" cy="86" rx="21" ry="25"/>` +
-    `<path d="M80 94 q20 40 40 0 q-20 12 -40 0Z"/>` +
-    `<path d="M89 106 h22 v18 h-22Z"/>` +
-    // bahu & jubah panjang dengan lengan merapat
-    `<path d="M91 116 C68 120 46 130 43 154 L36 250 C34 282 30 306 28 330 H172 C170 306 166 282 164 250 L157 154 C154 130 132 120 109 116 Q100 124 91 116Z"/>` +
-    `</g>`;
-  write('man.svg', plain(200, 340, body, defs));
+    `<path d="${arch}" fill="url(#plate)"/>` +
+    `<g clip-path="url(#clip)">` +
+    `<ellipse cx="120" cy="118" rx="104" ry="118" fill="url(#aura)"/>` +
+    // lingkaran cahaya tipis di belakang kepala
+    `<circle cx="120" cy="112" r="66" fill="none" stroke="${C.blue[3]}" stroke-opacity=".5" stroke-width="1.2"/>` +
+    `<circle cx="120" cy="112" r="74" fill="none" stroke="${C.blue[3]}" stroke-opacity=".28" stroke-width="1"/>` +
+    fig +
+    flowers +
+    `</g>` +
+    `<path d="${arch}" fill="none" stroke="${C.line}" stroke-width="2"/>` +
+    `<path d="M24 274 V122 A96 96 0 0 1 216 122 V274 Q216 290 200 290 H40 Q24 290 24 274Z" fill="none" stroke="${C.line}" stroke-opacity=".55" stroke-width="1"/>` +
+    blossom(120, 18, 9) + blossom(100, 24, 5, true) + blossom(140, 24, 5, true);
+  return svg(240, 300, body, defs);
 }
 
-// ── 8. Siluet muslimah (khimar panjang, gamis lebar, tanpa cadar) ─────────────────────────
+// Pria (menghadap depan): tarbusy khas Azhar + sorban melilit, jenggot tipis, jubah. Dua nada tinta: wajah sedikit
+// lebih terang agar terbaca, selebihnya siluet pekat.
 {
-  const defs = `<linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${INK}"/><stop offset=".7" stop-color="${INK}"/><stop offset="1" stop-color="#3B4144"/></linearGradient>
-  <mask id="cut"><rect width="200" height="340" fill="#fff"/>
-    <path d="M62 170 C54 186 56 204 62 214" fill="none" stroke="#000" stroke-width="2.4"/>
-    <path d="M138 170 C146 186 144 204 138 214" fill="none" stroke="#000" stroke-width="2.4"/>
-    <path d="M92 214 Q100 222 108 214" fill="none" stroke="#000" stroke-width="2.2"/>
-  </mask>`;
-  const body =
-    `<g mask="url(#cut)" fill="url(#fill)">` +
-    // khimar: kepala membulat melebar menjadi cape sampai pinggang
-    `<path d="M100 22 C78 22 66 42 66 68 C66 90 70 104 58 120 C42 140 36 166 36 196 Q100 216 164 196 C164 166 158 140 142 120 C130 104 134 90 134 68 C134 42 122 22 100 22Z"/>` +
-    // gamis: bahu → pinggang ramping → melebar ke ujung
-    `<path d="M64 190 C60 216 62 236 58 262 C54 290 40 312 30 332 H170 C160 312 146 290 142 262 C138 236 140 216 136 190 Q100 204 64 190Z"/>` +
-    // wajah: oval sedikit lebih terang agar terbaca sebagai wajah berhijab (tanpa cadar)
-    `<path d="M82 70 C80 54 90 46 100 46 C110 46 120 54 118 70 C120 92 110 108 100 108 C90 108 80 92 82 70Z" fill="#555B5F"/>` +
+  const FACE = '#566066';
+  const fig =
+    // bahu & dada (jubah) — simetris
+    `<g transform="translate(0 -14)"><path d="M4 322 C6 262 24 236 62 224 C84 217 98 214 104 204 L136 204 C142 214 156 217 178 224 C216 236 234 262 236 322Z" fill="url(#ink)"/>` +
+    // leher
+    `<path d="M103 168 L137 168 L140 214 C132 224 108 224 100 214Z" fill="url(#ink)"/></g>` +
+    // telinga
+    `<ellipse cx="87" cy="134" rx="5.5" ry="10" fill="url(#ink)"/><ellipse cx="153" cy="134" rx="5.5" ry="10" fill="url(#ink)"/>` +
+    // kepala & wajah
+    `<path d="M88 128 C88 104 100 92 120 92 C140 92 152 104 152 128 C152 154 140 178 120 180 C100 178 88 154 88 128Z" fill="${FACE}"/>` +
+    // jenggot tipis mengikuti rahang
+    `<path d="M88 134 C90 160 104 182 120 184 C136 182 150 160 152 134 C148 152 138 162 120 164 C102 162 92 152 88 134Z" fill="url(#ink)"/>` +
+    `<path d="M108 150 C114 146 126 146 132 150 C126 153 114 153 108 150Z" fill="url(#ink)" fill-opacity=".85"/>` +
+    // tarbusy (kerucut terpancung)
+    `<path d="M87 94 C87 70 98 46 109 40 C116 36 124 36 131 40 C142 46 153 70 153 94Z" fill="url(#ink)"/>` +
+    // sorban melingkar di pangkal tarbusy
+    `<path d="M80 99 C80 84 96 77 120 77 C144 77 160 84 160 99 C160 110 144 114 120 114 C96 114 80 110 80 99Z" fill="url(#ink)"/>` +
+    // jumbai tarbusy
+    `<path d="M120 38 C140 28 158 38 160 60" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>` +
+    `<path d="M156 60 q4 -4 8 0 l-1.5 16 q-2.5 3 -5 0Z" fill="${INK}"/>` +
+    // lipatan sorban, kerah & lipatan jubah (garis halus berwarna kertas)
+    `<g fill="none" stroke="${PAPER}" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round">` +
+    `<path d="M84 94 C102 104 138 104 156 94"/><path d="M86 104 C104 112 136 112 154 104" stroke-opacity=".32"/>` +
+    `<path d="M104 192 C112 218 116 262 120 302"/><path d="M136 192 C128 218 124 262 120 302" stroke-opacity=".4"/>` +
+    `<path d="M104 192 C96 200 80 206 64 212" stroke-opacity=".4"/><path d="M136 192 C144 200 160 206 176 212" stroke-opacity=".4"/>` +
     `</g>`;
-  write('woman.svg', plain(200, 340, body, defs));
+  write('man.svg', portrait(fig, 211));
+}
+
+// Wanita (menghadap depan): khimar panjang menutup dada, tanpa cadar; wajah oval lebih terang.
+{
+  const FACE = '#5B6166';
+  const fig =
+    // khimar: kepala membulat → melebar menjadi cape sampai dada (simetris)
+    `<path d="M120 38 C80 38 64 74 66 112 C68 140 60 166 42 188 C22 212 10 244 8 302 L232 302 C230 244 218 212 198 188 C180 166 172 140 174 112 C176 74 160 38 120 38Z" fill="url(#ink)"/>` +
+    // wajah
+    `<path d="M120 80 C100 80 91 98 91 118 C91 144 104 164 120 166 C136 164 149 144 149 118 C149 98 140 80 120 80Z" fill="${FACE}"/>` +
+    // bayangan lembut di sekeliling wajah (kedalaman kain)
+    `<path d="M120 76 C94 76 84 98 84 118 C84 148 100 170 120 172 C140 170 156 148 156 118 C156 98 146 76 120 76Z" fill="none" stroke="${PAPER}" stroke-opacity=".3" stroke-width="1.4"/>` +
+    // lipatan khimar
+    `<g fill="none" stroke="${PAPER}" stroke-opacity=".4" stroke-width="1.5" stroke-linecap="round">` +
+    `<path d="M120 46 C92 46 76 76 78 112"/><path d="M120 46 C148 46 164 76 162 112"/>` +
+    `<path d="M98 176 C80 200 62 222 54 262"/><path d="M142 176 C160 200 178 222 186 262"/>` +
+    `<path d="M120 170 C118 206 116 250 112 302" stroke-opacity=".28"/>` +
+    `</g>` +
+    // bros kecil di dada
+    `<g transform="translate(120 214)"><circle r="7" fill="${PAPER}" fill-opacity=".85"/><circle r="3" fill="${C.blue[1]}"/></g>`;
+  write('woman.svg', portrait(fig, 311));
 }
 
 // ── 9. Burung layang-layang ──────────────────────────────────────────────────────────────

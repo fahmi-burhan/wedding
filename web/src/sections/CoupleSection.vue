@@ -21,6 +21,7 @@ import BandSection from '../components/BandSection.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import Butterfly from '../components/Butterfly.vue';
+import Motes from '../components/Motes.vue';
 import backdrop from '../assets/ornaments/backdrop.svg';
 import mosque from '../assets/scenes/mosque.svg';
 import man from '../assets/scenes/man.svg';
@@ -43,19 +44,20 @@ const card =
 </script>
 
 <template>
-  <BandSection id="mempelai" tone="paper" labelledby="mempelai-judul">
+  <BandSection id="mempelai" tone="paper" from="cream" labelledby="mempelai-judul">
     <!-- Latar diam: tetap di layar selama kartu bergulir -->
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div class="sticky top-0 h-svh w-full overflow-hidden">
         <img :src="backdrop" alt="" class="absolute inset-0 size-full object-cover" />
-        <img :src="mosque" alt="" class="absolute inset-x-0 bottom-0 w-full opacity-70" />
+        <img :src="mosque" alt="" class="parallax-slow absolute inset-x-0 bottom-0 w-full opacity-70" />
+        <Motes :count="16" :seed="3" />
         <img :src="sparkle" alt="" class="twinkle absolute left-[14%] top-[18%] w-5" />
         <img :src="sparkle" alt="" class="twinkle absolute right-[16%] top-[30%] w-4" style="animation-delay: -1.1s" />
         <img :src="sparkle" alt="" class="twinkle absolute left-[22%] top-[58%] w-3" style="animation-delay: -2s" />
         <img :src="sparkle" alt="" class="twinkle absolute right-[10%] top-[72%] w-5" style="animation-delay: -0.6s" />
       </div>
     </div>
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
 
     <div class="relative z-[5] mx-auto flex max-w-[380px] flex-col gap-12 px-4 pb-32 pt-[150px] text-center">
       <h2 id="mempelai-judul" class="sr-only">Kedua Mempelai</h2>
@@ -78,10 +80,10 @@ const card =
 
       <!-- 3 & 4. Mempelai -->
       <article v-for="item in people" :key="item.p.shortName" :class="[card, 'pb-10 pt-8']" :aria-label="item.p.fullName">
-        <div class="relative mx-auto grid h-[230px] w-[158px] place-items-end overflow-hidden rounded-t-full bg-gradient-to-b from-white/80 to-cream-tint/80 ring-1 ring-line/40">
-          <img v-reveal:zoom :src="item.img" :alt="item.alt" class="bob h-[210px] w-auto select-none" :style="{ animationDelay: `${item.delay}s` }" />
-          <img :src="sparkle" alt="" aria-hidden="true" class="twinkle absolute left-3 top-10 w-3" />
-          <img :src="sparkle" alt="" aria-hidden="true" class="twinkle absolute right-4 top-16 w-4" style="animation-delay: -1s" />
+        <div class="relative mx-auto w-[208px]">
+          <img v-reveal:zoom :src="item.img" :alt="item.alt" class="breathe w-full select-none drop-shadow-[0_10px_18px_rgba(30,32,34,0.16)]" :style="{ animationDelay: `${item.delay}s` }" />
+          <img :src="sparkle" alt="" aria-hidden="true" class="twinkle absolute -left-3 top-16 w-4" />
+          <img :src="sparkle" alt="" aria-hidden="true" class="twinkle absolute -right-3 top-28 w-5" style="animation-delay: -1s" />
         </div>
 
         <p v-reveal:mask="150" class="mt-5 font-script text-[3.2rem] leading-[1.25] text-ink" aria-hidden="true">{{ item.p.shortName }}</p>

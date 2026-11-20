@@ -14,7 +14,7 @@ import sprig from '../assets/ornaments/sprig.svg';
 </script>
 
 <template>
-  <BandSection v-if="event.speakers" id="tausiyah" tone="paper" labelledby="tausiyah-judul">
+  <BandSection v-if="event.speakers" id="tausiyah" tone="paper" from="cream" labelledby="tausiyah-judul">
     <img :src="crescent" alt="" aria-hidden="true" class="bob pointer-events-none absolute right-[8%] top-10 w-14 opacity-90" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[12%] top-14 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute bottom-12 left-[20%] w-3" style="animation-delay: -1.5s" />

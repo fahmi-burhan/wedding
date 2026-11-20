@@ -29,7 +29,9 @@ Semua aset pihak ketiga yang dipakai undangan ini, beserta sumber dan lisensinya
 | Aset | Sumber | Lisensi |
 |---|---|---|
 | `web/src/assets/brand/logo.png` (logo cover) | Dari `referensi/4.jpeg`, kiriman klien; latar dibuang dan diwarnai hitam oleh `scripts/process-assets.ts` | Milik klien (dibuat/dipilih klien) |
-| `web/src/assets/brand/daawa-zifaf.png` (kaligrafi "دعوة زفاف") | Dipotong dari `referensi/7.jpeg`, sebuah templat undangan Arab (tertera watermark "BHK DESIGN") atas permintaan klien; diperbesar dan diwarnai hitam | **PERLU CEK LISENSI**: pembuat aslinya pihak ketiga. Bila tidak berizin, ganti dengan kaligrafi buatan sendiri atau font (mis. Aref Ruqaa) |
+| `web/src/assets/brand/daawa-zifaf.svg` (kaligrafi "دعوة زفاف") | **Buatan sendiri**: huruf Arab diubah menjadi kurva vektor dari font Aref Ruqaa Bold (SIL OFL) oleh `scripts/generate-calligraphy.ts`, ditambah hiasan hati, goresan, dan titik yang digambar dengan kode. Tidak memakai gambar referensi | Milik proyek (huruf: SIL OFL) |
+
+Kaligrafi tidak diambil dari gambar referensi klien (no. 7); gambar itu hanya dilihat sebagai gambaran gaya.
 
 Nama Arab di sampul ("حسين" dan "الزهرة") adalah teks biasa dengan font Aref Ruqaa Bold (SIL OFL), bukan gambar.
 

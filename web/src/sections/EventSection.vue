@@ -11,7 +11,9 @@ import { event } from '../../../config/event.ts';
 import { formatTime, partsInZone } from '../../../shared/date.ts';
 import { googleCalendarUrl } from '../composables/calendar.ts';
 import BandSection from '../components/BandSection.vue';
+import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
+import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import swagTop from '../assets/ornaments/swag-top.svg';
@@ -30,8 +32,10 @@ const sessions = event.sessions.map((s) => {
 </script>
 
 <template>
-  <BandSection id="acara" tone="cream" labelledby="acara-judul">
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+  <BandSection id="acara" tone="cream" from="paper" labelledby="acara-judul">
+    <Motes :count="12" :seed="19" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[3%] top-[70px] z-10" :size="38" :delay="-1" />
     <Lantern class="right-[3%] top-[70px] z-10" :size="42" :delay="-3" />
 

@@ -10,7 +10,9 @@ import { CameraOff, Clock, HandHeart, Shirt, Utensils } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import type { EtiquetteItem } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
+import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import swagTop from '../assets/ornaments/swag-top.svg';
@@ -28,8 +30,10 @@ const card = 'relative rounded-[2rem] bg-paper/95 px-6 shadow-[0_14px_44px_rgba(
 </script>
 
 <template>
-  <BandSection id="pemberitahuan" tone="cream" labelledby="pemberitahuan-judul">
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+  <BandSection id="pemberitahuan" tone="cream" from="paper" labelledby="pemberitahuan-judul">
+    <Motes :count="12" :seed="11" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[4%] top-[70px] z-10" :size="38" />
     <Lantern class="right-[4%] top-[70px] z-10" :size="40" :delay="-2.2" />
 

@@ -45,14 +45,14 @@ function open() {
   if (leaving.value) return;
   leaving.value = true;
   emit('open');
-  window.setTimeout(() => emit('gone'), reduced ? 200 : 1150);
+  window.setTimeout(() => emit('gone'), reduced ? 300 : 1350);
 }
 </script>
 
 <template>
   <div
-    class="paper fixed inset-y-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 overflow-hidden transition-transform duration-[1000ms] ease-[cubic-bezier(.7,0,.2,1)]"
-    :class="leaving ? '!-translate-y-full' : ''"
+    class="paper fixed inset-y-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 overflow-hidden transition-[translate,opacity] duration-[1300ms] ease-[cubic-bezier(.45,0,.2,1)]"
+    :class="leaving ? '!-translate-y-[28%] opacity-0' : 'opacity-100'"
     role="dialog"
     aria-modal="true"
     aria-labelledby="cover-title"

@@ -6,11 +6,10 @@
  * Memanggil: sharp.
  * Hasil (di-commit, karena folder referensi/ tidak ikut git):
  *   web/src/assets/brand/logo.png          dari referensi/4.jpeg  (logo cover)
- *   web/src/assets/brand/daawa-zifaf.png   dari referensi/7.jpeg  (kaligrafi "دعوة زفاف")
  *
  * Cara kerja: latar gambar dibuang dengan mengubah selisih terang → transparansi (alpha), lalu warnanya
- * diganti hitam #1E2022 sesuai permintaan klien (tulisan hitam). Kaligrafi bersumber dari gambar kecil,
- * jadi diperbesar lalu tepinya dipertajam dengan kurva smoothstep agar tidak buram.
+ * diganti hitam #1E2022 sesuai permintaan klien (tulisan hitam). Kaligrafi "دعوة زفاف" TIDAK dari gambar:
+ * dibuat sendiri sebagai vektor oleh scripts/generate-calligraphy.ts.
  */
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -51,12 +50,3 @@ async function inkify(input: Sharp, lo: number, hi: number, file: string, width?
 
 // Logo: slate gelap (±98) di atas latar abu terang (±217).
 await inkify(sharp(resolve(root, 'referensi', '4.jpeg')), 120, 200, 'logo.png');
-
-// Kaligrafi "دعوة زفاف": emas (±160) di atas kertas putih-krem (±245), diperbesar 5× supaya halus.
-await inkify(
-  sharp(resolve(root, 'referensi', '7.jpeg')).extract({ left: 430, top: 245, width: 240, height: 110 }),
-  175,
-  232,
-  'daawa-zifaf.png',
-  1200,
-);

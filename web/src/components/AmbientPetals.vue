@@ -2,13 +2,13 @@
   web/src/components/AmbientPetals.vue — beberapa kelopak yang terus melayang pelan di layar setelah
   undangan dibuka, agar halaman terasa "hidup" seperti referensi.
   Dipanggil oleh: App.vue.  Memanggil: petal.svg, animasi `petal-drift` (main.css).
-  Hanya 7 kelopak, animasi transform/opacity saja (ringan untuk ponsel). Disembunyikan saat "kurangi gerakan".
+  Hanya 12 kelopak, animasi transform/opacity saja (ringan untuk ponsel). Disembunyikan saat "kurangi gerakan".
 -->
 <script setup lang="ts">
 import petal from '../assets/ornaments/petal.svg';
 
-const petals = Array.from({ length: 7 }, (_, i) => ({
-  left: `${8 + i * 13 + Math.round(Math.random() * 6)}%`,
+const petals = Array.from({ length: 12 }, (_, i) => ({
+  left: `${4 + i * 8 + Math.round(Math.random() * 5)}%`,
   size: `${11 + Math.round(Math.random() * 8)}px`,
   duration: `${16 + Math.round(Math.random() * 12)}s`,
   delay: `${-Math.round(Math.random() * 20)}s`, // negatif: sebagian sudah "di tengah jalan" saat muncul

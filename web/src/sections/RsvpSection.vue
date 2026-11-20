@@ -20,9 +20,11 @@ import { guest } from '../composables/useGuest.ts';
 import type { RsvpSummary } from '../composables/useGuest.ts';
 import { readLastRsvp, submissionId, wishesVersion, writeLastRsvp } from '../composables/rsvpStore.ts';
 import BandSection from '../components/BandSection.vue';
+import Motes from '../components/Motes.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import WishesSection from './WishesSection.vue';
 import Lantern from '../components/Lantern.vue';
+import Butterfly from '../components/Butterfly.vue';
 import swagTop from '../assets/ornaments/swag-top.svg';
 import ringsFloral from '../assets/scenes/rings-floral.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
@@ -152,8 +154,10 @@ function edit() {
 </script>
 
 <template>
-  <BandSection id="rsvp" tone="cream" labelledby="rsvp-judul">
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+  <BandSection id="rsvp" tone="cream" from="paper" labelledby="rsvp-judul">
+    <Motes :count="12" :seed="13" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[3%] top-[70px] z-10" :size="36" />
     <Lantern class="right-[3%] top-[70px] z-10" :size="38" :delay="-2" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[22%] top-[190px] z-10 w-4" />

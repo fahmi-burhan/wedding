@@ -10,7 +10,9 @@
 <script setup lang="ts">
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
+import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import quran from '../assets/scenes/quran.svg';
 import swagTop from '../assets/ornaments/swag-top.svg';
@@ -19,8 +21,10 @@ import bed from '../assets/scenes/bed-bottom.svg';
 </script>
 
 <template>
-  <BandSection id="ayat" tone="cream" labelledby="ayat-judul">
-    <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+  <BandSection id="ayat" tone="cream" from="paper" labelledby="ayat-judul">
+    <Motes :count="12" :seed="23" />
+    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
+    <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[4%] top-[70px] z-10" :size="40" />
     <Lantern class="right-[4%] top-[70px] z-10" :size="36" :delay="-1.8" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[30%] top-[150px] z-10 w-4" />
