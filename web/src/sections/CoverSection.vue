@@ -1,7 +1,7 @@
 <!--
   web/src/sections/CoverSection.vue — sampul layar penuh (Revisi Client 1): jendela lengkung berisi
   logo → "WEDDING INVITATION" → nama Arab (gaya kaligrafi) → tanggal → "Kepada Yth." + nama tamu (tanpa kotak)
-  → permintaan maaf → tombol "Buka Undangan". Hamparan bunga di dasar, bunga menggantung di atas.
+  → permintaan maaf → tombol "Buka Undangan". Bunga menggantung di atas dan untaian bunga di kedua sisi (meluncur masuk dari samping).
   Dipanggil oleh: App.vue.
   Memanggil: useGuest.ts (nama tamu), shared/date.ts, config/event.ts, ornamen & logo di assets/.
 
@@ -18,7 +18,7 @@ import { guest, GENERIC_GREETING } from '../composables/useGuest.ts';
 import Butterfly from '../components/Butterfly.vue';
 import Lantern from '../components/Lantern.vue';
 import logo from '../assets/brand/logo.png';
-import bed from '../assets/scenes/bed-bottom.svg';
+import SideFlower from '../components/SideFlower.vue';
 import swagTop from '../assets/ornaments/swag-top.svg';
 import backdrop from '../assets/ornaments/backdrop.svg';
 import mosque from '../assets/scenes/mosque.svg';
@@ -59,14 +59,14 @@ function open() {
   >
     <!-- Latar: cat air lembut + siluet masjid samar -->
     <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 size-full object-cover opacity-90" />
-    <img :src="mosque" alt="" aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-[16svh] w-full opacity-60" />
+    <img :src="mosque" alt="" aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-[7svh] w-full opacity-60" />
 
     <!-- Jendela lengkung -->
     <div
-      class="absolute inset-x-5 bottom-[calc(clamp(120px,22svh,210px)-26px)] top-6 rounded-b-[28px] rounded-t-[999px] border-[5px] border-white/95 bg-white/50 shadow-[0_12px_44px_rgba(30,32,34,0.12)]"
+      class="absolute inset-x-5 bottom-6 top-6 rounded-b-[28px] rounded-t-[999px] border-[5px] border-white/95 bg-white/50 shadow-[0_12px_44px_rgba(30,32,34,0.12)]"
       aria-hidden="true"
     />
-    <div class="pointer-events-none absolute inset-x-[30px] bottom-[calc(clamp(120px,22svh,210px)-17px)] top-[35px] rounded-b-[20px] rounded-t-[999px] border border-line/50" aria-hidden="true" />
+    <div class="pointer-events-none absolute inset-x-[30px] bottom-[15px] top-[35px] rounded-b-[20px] rounded-t-[999px] border border-line/50" aria-hidden="true" />
 
     <!-- Bunga menggantung di atas + lampion berayun -->
     <img :src="swagTop" alt="" aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 w-[118%] max-w-none -translate-x-1/2 select-none" style="animation: rise-in 1.2s var(--ease-soft) 0.2s both" />
@@ -76,7 +76,7 @@ function open() {
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[25%] top-[24%] z-10 w-3" style="animation-delay: -1.4s" />
 
     <!-- Isi -->
-    <div class="absolute inset-x-5 bottom-[calc(clamp(120px,22svh,210px)-26px)] top-6 flex flex-col items-center justify-center px-6 pt-[clamp(28px,7svh,64px)] text-center">
+    <div class="absolute inset-x-5 bottom-6 top-6 flex flex-col items-center justify-center px-6 pt-[clamp(28px,7svh,64px)] text-center">
       <img
         :src="logo"
         alt="Logo Husein dan Zahroh"
@@ -116,14 +116,10 @@ function open() {
       </button>
     </div>
 
-    <!-- Hamparan bunga di dasar (menempel di tepi bawah, bergoyang pelan) -->
-    <img
-      :src="bed"
-      alt=""
-      aria-hidden="true"
-      class="sway-b pointer-events-none absolute inset-x-0 bottom-0 w-full select-none object-cover object-bottom"
-      style="height: clamp(120px, 22svh, 210px)"
-    />
+    <SideFlower side="left" top="12%" always />
+    <SideFlower side="right" top="30%" always :delay="250" />
+    <SideFlower side="left" top="52%" always :delay="150" />
+    <SideFlower side="right" top="70%" always :delay="350" />
     <Butterfly class="left-[16%] top-[34%] z-10" :size="24" :fx="60" :fy="-40" :duration="12" />
     <Butterfly class="right-[14%] top-[62%] z-10" :size="20" :fx="-50" :fy="-60" :duration="10" :delay="-3" />
   </div>

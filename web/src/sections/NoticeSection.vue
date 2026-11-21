@@ -10,14 +10,13 @@ import { CameraOff, Clock, HandHeart, Shirt, Utensils } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import type { EtiquetteItem } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import SideFlower from '../components/SideFlower.vue';
 import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
 import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import SectionLabel from '../components/SectionLabel.vue';
-import swagTop from '../assets/ornaments/swag-top.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
-import bed from '../assets/scenes/bed-bottom.svg';
 
 const ICONS: Record<EtiquetteItem['icon'], unknown> = {
   utensils: Utensils,
@@ -31,13 +30,16 @@ const card = 'relative rounded-[2rem] bg-paper/95 px-6 shadow-[0_14px_44px_rgba(
 
 <template>
   <BandSection id="pemberitahuan" tone="cream" from="paper" labelledby="pemberitahuan-judul">
+    <SideFlower side="left" top="5%" />
+    <SideFlower side="right" top="24%" :delay="200" />
+    <SideFlower side="left" top="50%" :delay="100" />
+    <SideFlower side="right" top="72%" :delay="250" />
     <Motes :count="12" :seed="11" />
-    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[4%] top-[70px] z-10" :size="38" />
     <Lantern class="right-[4%] top-[70px] z-10" :size="40" :delay="-2.2" />
 
-    <div class="relative z-[5] mx-auto flex max-w-[380px] flex-col gap-10 px-4 pb-44 pt-[150px] text-center">
+    <div class="relative z-[5] mx-auto flex max-w-[380px] flex-col gap-10 px-4 pb-28 pt-[150px] text-center">
       <!-- Pemberitahuan penting -->
       <div :class="[card, 'pb-10 pt-8']">
         <SectionLabel :text="event.notice.title" />
@@ -69,6 +71,5 @@ const card = 'relative rounded-[2rem] bg-paper/95 px-6 shadow-[0_14px_44px_rgba(
       </div>
     </div>
 
-    <img :src="bed" alt="" aria-hidden="true" class="sway-b pointer-events-none absolute inset-x-0 bottom-0 z-[6] w-full select-none object-cover object-bottom" style="height: 160px" />
   </BandSection>
 </template>

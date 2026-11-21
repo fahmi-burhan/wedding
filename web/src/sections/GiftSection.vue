@@ -10,9 +10,9 @@ import { ref } from 'vue';
 import { Check, ChevronDown, Copy, Gift } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import SideFlower from '../components/SideFlower.vue';
 import Motes from '../components/Motes.vue';
 import SectionLabel from '../components/SectionLabel.vue';
-import swagTop from '../assets/ornaments/swag-top.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
 import backdrop from '../assets/ornaments/backdrop.svg';
 
@@ -32,10 +32,12 @@ const spaced = (n: string) => n.replace(/(.{4})/g, '$1 ').trim();
 </script>
 
 <template>
-  <BandSection v-if="event.gift" id="gift" tone="paper" from="cream" labelledby="gift-judul">
+  <BandSection fade v-if="event.gift" id="gift" tone="paper" from="cream" labelledby="gift-judul">
+    <SideFlower side="left" top="6%" />
+    <SideFlower side="right" top="30%" :delay="200" />
+    <SideFlower side="left" top="58%" :delay="100" />
     <Motes :count="12" :seed="17" />
     <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
-    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[14%] top-[34%] z-10 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[16%] top-[44%] z-10 w-3" style="animation-delay: -1.2s" />
 

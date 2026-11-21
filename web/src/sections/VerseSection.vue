@@ -10,27 +10,29 @@
 <script setup lang="ts">
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import SideFlower from '../components/SideFlower.vue';
 import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
 import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import quran from '../assets/scenes/quran.svg';
-import swagTop from '../assets/ornaments/swag-top.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
-import bed from '../assets/scenes/bed-bottom.svg';
 </script>
 
 <template>
   <BandSection id="ayat" tone="cream" from="paper" labelledby="ayat-judul">
+    <SideFlower side="left" top="6%" />
+    <SideFlower side="right" top="28%" :delay="200" />
+    <SideFlower side="left" top="54%" :delay="100" />
+    <SideFlower side="right" top="74%" :delay="250" />
     <Motes :count="12" :seed="23" />
-    <img :src="swagTop" alt="" aria-hidden="true" class="sway-t pointer-events-none absolute -top-7 left-1/2 z-10 w-[112%] max-w-none -translate-x-1/2 select-none" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[4%] top-[70px] z-10" :size="40" />
     <Lantern class="right-[4%] top-[70px] z-10" :size="36" :delay="-1.8" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[30%] top-[150px] z-10 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[28%] top-[140px] z-10 w-3" style="animation-delay: -1.2s" />
 
-    <div class="relative z-[5] mx-auto max-w-[400px] px-5 pb-48 pt-[150px] text-center">
+    <div class="relative z-[5] mx-auto max-w-[400px] px-5 pb-28 pt-[150px] text-center">
       <img v-reveal:zoom :src="quran" alt="" aria-hidden="true" class="bob mx-auto -mb-6 w-[150px] select-none" />
 
       <div class="relative rounded-[2rem] bg-paper/95 px-6 pb-10 pt-12 shadow-[0_14px_44px_rgba(30,32,34,0.14)] ring-1 ring-line/35">
@@ -52,6 +54,5 @@ import bed from '../assets/scenes/bed-bottom.svg';
       </div>
     </div>
 
-    <img :src="bed" alt="" aria-hidden="true" class="sway-b pointer-events-none absolute inset-x-0 bottom-0 z-[6] w-full select-none object-cover object-bottom" style="height: 170px" />
   </BandSection>
 </template>

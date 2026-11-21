@@ -1,6 +1,6 @@
 <!--
-  web/src/App.vue — kerangka halaman undangan: sampul → 8 bagian (hero, ayat, mempelai+hitung mundur,
-  waktu & tempat, tausiyah, pemberitahuan+adab, wedding gift, RSVP+ucapan) → footer → tombol musik.
+  web/src/App.vue — kerangka halaman undangan: sampul → bagian (hero, ayat, mempelai, hitung mundur,
+  waktu & tempat + tausiyah (paralaks), pemberitahuan+adab, wedding gift, RSVP+ucapan) → footer → tombol musik.
   Dipanggil oleh: web/src/main.ts.
   Memanggil: semua komponen di web/src/sections/, useGuest.ts, reveal.ts, MusicToggle, PetalBurst, PatternStrip.
 
@@ -11,20 +11,20 @@
   1. Klik "Buka Undangan" → onOpen(): kunci scroll dilepas, MUSIK DIPUTAR (masih dalam klik = diizinkan browser),
      kelopak berjatuhan, animasi scroll mulai aktif, sampul naik keluar layar.
   2. Setelah transisi selesai, sampul dihapus dari DOM (onGone) dan fokus pindah ke isi undangan.
-  sessionStorage mengingat bahwa tamu sudah membuka undangan, jadi saat halaman dimuat ulang
-  sampul dilewati (musik tidak otomatis menyala — tamu bisa menekan tombol musik).
+  Setiap halaman dimuat ulang, sampul SELALU tampil lagi (tidak ada yang diingat), dan scroll kembali ke atas.
 -->
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { event } from '../../config/event.ts';
 import { loadGuest } from './composables/useGuest.ts';
 import { startReveals } from './composables/reveal.ts';
+import { invitationOpen } from './composables/openState.ts';
 import CoverSection from './sections/CoverSection.vue';
 import HeroSection from './sections/HeroSection.vue';
 import VerseSection from './sections/VerseSection.vue';
 import CoupleSection from './sections/CoupleSection.vue';
 import EventSection from './sections/EventSection.vue';
-import SpeakerSection from './sections/SpeakerSection.vue';
+import CountdownSection from './sections/CountdownSection.vue';
 import NoticeSection from './sections/NoticeSection.vue';
 import GiftSection from './sections/GiftSection.vue';
 import RsvpSection from './sections/RsvpSection.vue';
@@ -33,17 +33,8 @@ import MusicToggle from './components/MusicToggle.vue';
 import PetalBurst from './components/PetalBurst.vue';
 import AmbientPetals from './components/AmbientPetals.vue';
 
-const OPENED_KEY = 'undangan.opened';
-const wasOpened = (() => {
-  try {
-    return sessionStorage.getItem(OPENED_KEY) === '1';
-  } catch {
-    return false;
-  }
-})();
-
-const opened = ref(wasOpened);
-const coverVisible = ref(!wasOpened);
+const opened = ref(false);
+const coverVisible = ref(true);
 const showPetals = ref(false);
 const main = ref<HTMLElement | null>(null);
 const music = ref<InstanceType<typeof MusicToggle> | null>(null);
@@ -59,13 +50,13 @@ function onScroll() {
   });
 }
 
+// Setiap muat ulang SELALU mulai dari sampul, di paling atas (bukan posisi scroll lama).
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
 onMounted(() => {
+  window.scrollTo(0, 0);
   window.addEventListener('scroll', onScroll, { passive: true });
   loadGuest();
-  if (wasOpened) {
-    document.documentElement.classList.remove('is-locked');
-    startReveals();
-  }
 });
 
 onUnmounted(() => window.removeEventListener('scroll', onScroll));
@@ -76,13 +67,9 @@ function onOpen() {
   showPetals.value = true;
   document.documentElement.classList.remove('is-locked');
   window.scrollTo(0, 0);
-  try {
-    sessionStorage.setItem(OPENED_KEY, '1');
-  } catch {
-    /* mode privat: abaikan */
-  }
   // Mulai animasi saat sampul mulai naik, agar tamu melihat bagian pertama "hidup".
   window.setTimeout(startReveals, 500);
+  window.setTimeout(() => (invitationOpen.value = true), 600);
   window.setTimeout(() => (showPetals.value = false), 4500);
 }
 
@@ -108,8 +95,8 @@ async function onGone() {
     <HeroSection />
     <VerseSection />
     <CoupleSection />
+    <CountdownSection />
     <EventSection />
-    <SpeakerSection />
     <NoticeSection />
     <GiftSection />
     <RsvpSection />

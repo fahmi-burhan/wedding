@@ -135,131 +135,68 @@ const plain = (w: number, h: number, body: string, defs = '') =>
   write('quran.svg', plain(200, 210, body, defs));
 }
 
-// ── 6. Cincin + bunga (referensi foto no. 8: cincin berpadu di tengah karangan bunga) ─────
+// ── 6. Cincin + bunga (referensi foto no. 8): karangan bunga sebagai dudukan, dua cincin emas
+//       bertumpuk saling mengait di atasnya ─────
 {
   const defs =
     WATERCOLOR_FILTER +
-    `<linearGradient id="ringA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${C.blue[4]}"/><stop offset=".45" stop-color="${C.blue[0]}"/><stop offset="1" stop-color="${C.blue[3]}"/></linearGradient>
-     <linearGradient id="ringB" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.cream[2]}"/><stop offset=".5" stop-color="#B9A58F"/><stop offset="1" stop-color="${C.cream[0]}"/></linearGradient>
-     <clipPath id="lowerX"><rect x="148" y="132" width="32" height="40"/></clipPath>`;
-  const R = 36;
-  const ring = (cx: number, g: string) => `<circle cx="${cx}" cy="124" r="${R}" fill="none" stroke="url(#${g})" stroke-width="9"/><circle cx="${cx}" cy="124" r="${R - 4.5}" fill="none" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="1.2"/>`;
+    `<linearGradient id="goldA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3E2B3"/><stop offset=".4" stop-color="#C9A45E"/><stop offset=".75" stop-color="#E7CF91"/><stop offset="1" stop-color="#B58C45"/></linearGradient>
+     <linearGradient id="goldB" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E8BF"/><stop offset=".5" stop-color="#C39B52"/><stop offset="1" stop-color="#E9D399"/></linearGradient>
+     <radialGradient id="rs" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#1E2022" stop-opacity=".28"/><stop offset="1" stop-color="#1E2022" stop-opacity="0"/></radialGradient>
+     <clipPath id="cross"><rect x="150" y="116" width="30" height="40"/></clipPath>`;
+  const ring = (cx: number, cy: number, rot: number, g: string) =>
+    `<g transform="translate(${cx} ${cy}) rotate(${rot})"><ellipse rx="38" ry="28" fill="none" stroke="url(#${g})" stroke-width="9"/><ellipse rx="33.5" ry="23.5" fill="none" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="1.1"/><ellipse rx="42" ry="32" fill="none" stroke="#7A5B22" stroke-opacity=".25" stroke-width=".8"/></g>`;
   const rnd = prng(91);
   let leaves = '';
-  for (let i = 0; i < 18; i++) {
-    const ang = -165 + i * 18 + (rnd() - 0.5) * 8;
-    const rad = 70 + rnd() * 16;
-    const px = 160 + Math.cos((ang * Math.PI) / 180) * rad;
-    const py = 128 + Math.sin((ang * Math.PI) / 180) * rad * 0.78;
-    leaves += leaf(px, py, 34 + rnd() * 24, ang + 90, pick(rnd, C.leaf));
+  for (let i = 0; i < 20; i++) {
+    const ang = -200 + i * 22 + (rnd() - 0.5) * 8;
+    const rad = 66 + rnd() * 22;
+    const px = 160 + Math.cos((ang * Math.PI) / 180) * rad * 1.15;
+    const py = 190 + Math.sin((ang * Math.PI) / 180) * rad * 0.6;
+    leaves += leaf(px, py, 32 + rnd() * 24, ang + 90, pick(rnd, C.leaf));
   }
   const body =
     leaves +
-    hydrangea(62, 96, 40, 92, 26) +
-    hydrangea(258, 92, 40, 93, 26) +
-    rose(104, 40, 26, 10) +
-    rose(220, 38, 24, 50) +
-    hydrangea(160, 196, 44, 94, 30) +
-    rose(66, 168, 20, 5) +
-    rose(254, 166, 20, 30) +
-    ring(142, 'ringB') +
-    ring(178, 'ringA') +
-    // A di depan B pada titik silang bawah → tampak saling mengait
-    `<g clip-path="url(#lowerX)">${ring(142, 'ringB')}</g>` +
-    // permata di cincin kanan
-    `<path d="M178 82 l6 7 l-6 9 l-6 -9Z" fill="#FFFFFF" stroke="${C.blue[0]}" stroke-width="1.4"/>` +
-    blossom(120, 70, 8) + blossom(206, 66, 7, true) + blossom(150, 160, 6, true) + blossom(300, 128, 7);
-  write('rings-floral.svg', svg(320, 240, body, defs));
+    hydrangea(160, 188, 52, 94, 40) +
+    hydrangea(96, 200, 34, 95, 22) +
+    hydrangea(226, 202, 34, 96, 22) +
+    rose(122, 168, 24, 10) +
+    rose(200, 166, 22, 50) +
+    rose(160, 214, 20, 5) +
+    rose(66, 214, 16, 30) +
+    rose(256, 216, 16, 70) +
+    blossom(96, 160, 8) + blossom(226, 156, 7, true) + blossom(52, 190, 6, true) + blossom(272, 190, 7) + blossom(160, 150, 6, true) +
+    // bayangan lembut di tempat cincin bertumpu
+    `<ellipse cx="160" cy="156" rx="62" ry="10" fill="url(#rs)"/>` +
+    ring(138, 120, -16, 'goldB') +
+    ring(180, 112, 12, 'goldA') +
+    // cincin kiri di depan pada titik silang bawah → tampak saling mengait
+    `<g clip-path="url(#cross)">${ring(138, 120, -16, 'goldB')}</g>` +
+    `<path d="M181 76 l6 7 l-6 9 l-6 -9Z" fill="#FFFFFF" stroke="#B58C45" stroke-width="1.4"/>`;
+  write('rings-floral.svg', svg(320, 250, body, defs));
 }
 
-// ── 7 & 8. Potret setengah dada (siluet profil gaya cameo) dalam bingkai lengkung + karangan bunga ─────
-/** Bingkai lengkung + latar lembut + karangan bunga di dasar; `fig` = isi (siluet) yang digambar di antaranya. */
-function portrait(fig: string, seed: number): string {
-  const arch = 'M16 274 V122 A104 104 0 0 1 224 122 V274 Q224 298 200 298 H40 Q16 298 16 274Z';
-  const defs =
-    WATERCOLOR_FILTER +
-    `<linearGradient id="plate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="${C.cream[2]}"/><stop offset="1" stop-color="${C.cream[1]}"/></linearGradient>
-     <linearGradient id="ink" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="300"><stop offset="0" stop-color="${INK}"/><stop offset=".62" stop-color="#262A2D"/><stop offset="1" stop-color="#3E4549"/></linearGradient>
-     <radialGradient id="aura" cx="50%" cy="38%" r="48%"><stop offset="0" stop-color="${C.blue[4]}" stop-opacity=".75"/><stop offset="1" stop-color="${C.blue[4]}" stop-opacity="0"/></radialGradient>
-     <clipPath id="clip"><path d="${arch}"/></clipPath>`;
-  const rnd = prng(seed);
-  let leaves = '';
-  for (let i = 0; i < 14; i++) leaves += leaf(14 + i * 15.5 + (rnd() - 0.5) * 8, 306, 44 + rnd() * 40, (rnd() - 0.5) * 100, pick(rnd, C.leaf));
-  const flowers =
-    leaves +
-    hydrangea(40, 284, 44, seed + 1, 34) +
-    hydrangea(204, 286, 44, seed + 2, 34) +
-    rose(98, 292, 22, 10) +
-    rose(146, 296, 20, 50) +
-    hydrangea(120, 306, 36, seed + 3, 26) +
-    blossom(30, 238, 7) + blossom(214, 240, 7, true) + blossom(64, 256, 6, true) + blossom(180, 258, 6);
-  const body =
-    `<path d="${arch}" fill="url(#plate)"/>` +
-    `<g clip-path="url(#clip)">` +
-    `<ellipse cx="120" cy="118" rx="104" ry="118" fill="url(#aura)"/>` +
-    // lingkaran cahaya tipis di belakang kepala
-    `<circle cx="120" cy="112" r="66" fill="none" stroke="${C.blue[3]}" stroke-opacity=".5" stroke-width="1.2"/>` +
-    `<circle cx="120" cy="112" r="74" fill="none" stroke="${C.blue[3]}" stroke-opacity=".28" stroke-width="1"/>` +
-    fig +
-    flowers +
-    `</g>` +
-    `<path d="${arch}" fill="none" stroke="${C.line}" stroke-width="2"/>` +
-    `<path d="M24 274 V122 A96 96 0 0 1 216 122 V274 Q216 290 200 290 H40 Q24 290 24 274Z" fill="none" stroke="${C.line}" stroke-opacity=".55" stroke-width="1"/>` +
-    blossom(120, 18, 9) + blossom(100, 24, 5, true) + blossom(140, 24, 5, true);
-  return svg(240, 300, body, defs);
-}
-
-// Pria (menghadap depan): tarbusy khas Azhar + sorban melilit, jenggot tipis, jubah. Dua nada tinta: wajah sedikit
-// lebih terang agar terbaca, selebihnya siluet pekat.
+// ── 6b. Rangkaian bunga tepi (menempel di tepi KIRI layar, dicerminkan untuk kanan) ─────────
 {
-  const FACE = '#566066';
-  const fig =
-    // bahu & dada (jubah) — simetris
-    `<g transform="translate(0 -14)"><path d="M4 322 C6 262 24 236 62 224 C84 217 98 214 104 204 L136 204 C142 214 156 217 178 224 C216 236 234 262 236 322Z" fill="url(#ink)"/>` +
-    // leher
-    `<path d="M103 168 L137 168 L140 214 C132 224 108 224 100 214Z" fill="url(#ink)"/></g>` +
-    // telinga
-    `<ellipse cx="87" cy="134" rx="5.5" ry="10" fill="url(#ink)"/><ellipse cx="153" cy="134" rx="5.5" ry="10" fill="url(#ink)"/>` +
-    // kepala & wajah
-    `<path d="M88 128 C88 104 100 92 120 92 C140 92 152 104 152 128 C152 154 140 178 120 180 C100 178 88 154 88 128Z" fill="${FACE}"/>` +
-    // jenggot tipis mengikuti rahang
-    `<path d="M88 134 C90 160 104 182 120 184 C136 182 150 160 152 134 C148 152 138 162 120 164 C102 162 92 152 88 134Z" fill="url(#ink)"/>` +
-    `<path d="M108 150 C114 146 126 146 132 150 C126 153 114 153 108 150Z" fill="url(#ink)" fill-opacity=".85"/>` +
-    // tarbusy (kerucut terpancung)
-    `<path d="M87 94 C87 70 98 46 109 40 C116 36 124 36 131 40 C142 46 153 70 153 94Z" fill="url(#ink)"/>` +
-    // sorban melingkar di pangkal tarbusy
-    `<path d="M80 99 C80 84 96 77 120 77 C144 77 160 84 160 99 C160 110 144 114 120 114 C96 114 80 110 80 99Z" fill="url(#ink)"/>` +
-    // jumbai tarbusy
-    `<path d="M120 38 C140 28 158 38 160 60" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>` +
-    `<path d="M156 60 q4 -4 8 0 l-1.5 16 q-2.5 3 -5 0Z" fill="${INK}"/>` +
-    // lipatan sorban, kerah & lipatan jubah (garis halus berwarna kertas)
-    `<g fill="none" stroke="${PAPER}" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round">` +
-    `<path d="M84 94 C102 104 138 104 156 94"/><path d="M86 104 C104 112 136 112 154 104" stroke-opacity=".32"/>` +
-    `<path d="M104 192 C112 218 116 262 120 302"/><path d="M136 192 C128 218 124 262 120 302" stroke-opacity=".4"/>` +
-    `<path d="M104 192 C96 200 80 206 64 212" stroke-opacity=".4"/><path d="M136 192 C144 200 160 206 176 212" stroke-opacity=".4"/>` +
-    `</g>`;
-  write('man.svg', portrait(fig, 211));
-}
-
-// Wanita (menghadap depan): khimar panjang menutup dada, tanpa cadar; wajah oval lebih terang.
-{
-  const FACE = '#5B6166';
-  const fig =
-    // khimar: kepala membulat → melebar menjadi cape sampai dada (simetris)
-    `<path d="M120 38 C80 38 64 74 66 112 C68 140 60 166 42 188 C22 212 10 244 8 302 L232 302 C230 244 218 212 198 188 C180 166 172 140 174 112 C176 74 160 38 120 38Z" fill="url(#ink)"/>` +
-    // wajah
-    `<path d="M120 80 C100 80 91 98 91 118 C91 144 104 164 120 166 C136 164 149 144 149 118 C149 98 140 80 120 80Z" fill="${FACE}"/>` +
-    // bayangan lembut di sekeliling wajah (kedalaman kain)
-    `<path d="M120 76 C94 76 84 98 84 118 C84 148 100 170 120 172 C140 170 156 148 156 118 C156 98 146 76 120 76Z" fill="none" stroke="${PAPER}" stroke-opacity=".3" stroke-width="1.4"/>` +
-    // lipatan khimar
-    `<g fill="none" stroke="${PAPER}" stroke-opacity=".4" stroke-width="1.5" stroke-linecap="round">` +
-    `<path d="M120 46 C92 46 76 76 78 112"/><path d="M120 46 C148 46 164 76 162 112"/>` +
-    `<path d="M98 176 C80 200 62 222 54 262"/><path d="M142 176 C160 200 178 222 186 262"/>` +
-    `<path d="M120 170 C118 206 116 250 112 302" stroke-opacity=".28"/>` +
-    `</g>` +
-    // bros kecil di dada
-    `<g transform="translate(120 214)"><circle r="7" fill="${PAPER}" fill-opacity=".85"/><circle r="3" fill="${C.blue[1]}"/></g>`;
-  write('woman.svg', portrait(fig, 311));
+  const rnd = prng(321);
+  let back = '';
+  let lines = '';
+  // sulur halus di tepi
+  lines += `<path d="M2 0 C20 90 -6 180 14 270 C30 350 0 430 12 520" fill="none" stroke="${C.line}" stroke-opacity=".7" stroke-width="1.3"/>`;
+  for (let i = 0; i < 12; i++) {
+    const y = 20 + i * 42 + rnd() * 14;
+    const n = 3 + Math.floor(rnd() * 2);
+    for (let k = 0; k < n; k++) {
+      back += leaf(-2, y + (rnd() - 0.5) * 16, 52 + rnd() * 62, 62 + k * 22 + (rnd() - 0.5) * 26, pick(rnd, C.leaf));
+    }
+  }
+  const spots: [number, number, number][] = [[6, 50, 40], [10, 196, 44], [4, 350, 42], [12, 470, 36]];
+  let blooms = '';
+  spots.forEach(([x, y, r], i) => (blooms += hydrangea(x, y, r, 330 + i, 26 + (i % 2) * 8)));
+  const roses: [number, number, number][] = [[52, 112, 22], [58, 256, 24], [50, 404, 22], [46, 24, 16], [40, 520, 16]];
+  roses.forEach(([x, y, r], i) => (blooms += rose(x, y, r, i * 40)));
+  for (let i = 0; i < 10; i++) blooms += blossom(40 + rnd() * 70, 20 + i * 50 + rnd() * 30, 5 + rnd() * 3, i % 2 === 0);
+  write('side-bloom.svg', svg(170, 540, back + lines + blooms));
 }
 
 // ── 9. Burung layang-layang ──────────────────────────────────────────────────────────────

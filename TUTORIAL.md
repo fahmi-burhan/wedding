@@ -75,7 +75,7 @@ Musik sudah aktif: berkas `web/public/music/musik.m4a` (dari klien), mulai otoma
 Untuk mengganti lagu, timpa berkas itu (format `.m4a`/`.mp3`, usahakan di bawah 4 MB) atau ubah `music.src` di `config/event.ts`. Untuk mematikan musik, ubah `music` menjadi `null`. Catat sumber dan lisensinya di [ATTRIBUTION.md](ATTRIBUTION.md).
 
 ### Mengubah warna/bentuk ilustrasi
-Ornamen bunga dan sulur digambar oleh [scripts/generate-ornaments.ts](scripts/generate-ornaments.ts), sedangkan siluet, masjid, lampion, cincin, dan pita motif oleh [scripts/generate-scenes.ts](scripts/generate-scenes.ts). Palet ada di [scripts/lib/art.ts](scripts/lib/art.ts) dan token di [web/src/styles/main.css](web/src/styles/main.css). Setelah mengubah:
+Ornamen bunga dan sulur digambar oleh [scripts/generate-ornaments.ts](scripts/generate-ornaments.ts), sedangkan masjid, lampion, cincin, dan pita motif oleh [scripts/generate-scenes.ts](scripts/generate-scenes.ts). Palet ada di [scripts/lib/art.ts](scripts/lib/art.ts) dan token di [web/src/styles/main.css](web/src/styles/main.css). Setelah mengubah:
 ```powershell
 npm run ornaments
 npm run scenes

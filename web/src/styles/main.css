@@ -274,6 +274,9 @@
 }
 
 /* Hiasan bunga yang menggantung dari tepi atas berayun pelan (poros di tepi atas). */
+/* Goyangan untaian bunga samping (poros di tepi layar). */
+.side-sway { animation: side-sway 6.5s ease-in-out infinite alternate; will-change: transform; }
+@keyframes side-sway { from { transform: rotate(-2.2deg); } to { transform: rotate(2.6deg) translateY(6px); } }
 .sway-t { transform-origin: 50% 0; animation: sway-t 8s ease-in-out infinite alternate; }
 @keyframes sway-t { from { transform: rotate(-0.9deg); } to { transform: rotate(0.9deg); } }
 
@@ -322,7 +325,7 @@
   }
   .draw-path { stroke-dashoffset: 0 !important; transition: none !important; }
   .swing { animation-duration: 9s !important; }
-  .sway-b, .sway-t, .bob, .breathe { animation-duration: 14s !important; }
+  .sway-b, .sway-t, .bob, .breathe, .side-sway { animation-duration: 14s !important; }
   .fly, .ambient-petals, .parallax-slow { display: none !important; }
   .parallax-slow { transform: none !important; }
 }

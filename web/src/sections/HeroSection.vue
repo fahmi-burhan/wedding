@@ -9,6 +9,7 @@
 import { ChevronDown } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
+import SideFlower from '../components/SideFlower.vue';
 import Birds from '../components/Birds.vue';
 import Butterfly from '../components/Butterfly.vue';
 import Lantern from '../components/Lantern.vue';
@@ -18,13 +19,15 @@ import calligraphy from '../assets/brand/daawa-zifaf.svg';
 import backdrop from '../assets/ornaments/backdrop.svg';
 import swagTop from '../assets/ornaments/swag-top.svg';
 import mosque from '../assets/scenes/mosque.svg';
-import bed from '../assets/scenes/bed-bottom.svg';
 import crescent from '../assets/scenes/crescent.svg';
 import sparkle from '../assets/scenes/sparkle.svg';
 </script>
 
 <template>
-  <BandSection id="beranda" tone="paper" full labelledby="beranda-nama">
+  <BandSection fade id="beranda" tone="paper" full labelledby="beranda-nama">
+    <SideFlower side="left" top="14%" />
+    <SideFlower side="right" top="34%" :delay="200" />
+    <SideFlower side="left" top="58%" :delay="100" />
     <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
     <img :src="mosque" alt="" aria-hidden="true" class="parallax-slow pointer-events-none absolute inset-x-0 bottom-[110px] -z-[5] w-full opacity-80" />
 
@@ -40,7 +43,7 @@ import sparkle from '../assets/scenes/sparkle.svg';
     <Butterfly class="left-[10%] top-[44%] z-[8]" :size="28" :fx="80" :fy="-50" :duration="14" />
     <Butterfly class="right-[10%] top-[58%] z-[8]" :size="22" :fx="-70" :fy="-70" :duration="11" :delay="-4" />
 
-    <div class="relative z-[7] flex flex-1 flex-col items-center px-5 pb-48 pt-[24svh] text-center">
+    <div class="relative z-[7] flex flex-1 flex-col items-center px-5 pb-24 pt-[24svh] text-center">
       <!-- Kaligrafi "دعوة زفاف" (undangan pernikahan) -->
       <h2 class="sr-only">Undangan pernikahan</h2>
       <img
@@ -69,6 +72,5 @@ import sparkle from '../assets/scenes/sparkle.svg';
       </a>
     </div>
 
-    <img :src="bed" alt="" aria-hidden="true" class="sway-b pointer-events-none absolute inset-x-0 bottom-0 z-[9] w-full select-none object-cover object-bottom" style="height: 190px" />
   </BandSection>
 </template>
