@@ -176,28 +176,34 @@ const plain = (w: number, h: number, body: string, defs = '') =>
   write('rings-floral.svg', svg(320, 250, body, defs));
 }
 
-// ── 6b. Rangkaian bunga tepi (menempel di tepi KIRI layar, dicerminkan untuk kanan) ─────────
-{
-  const rnd = prng(321);
+// ── 6b. Rangkaian bunga tepi (menempel di tepi KIRI layar, dicerminkan untuk kanan) — 4 corak berbeda ───────
+type Spot = [number, number, number];
+function sideArt(name: string, seed: number, o: { leafN: number[]; leafLen: [number, number]; hydr: Spot[]; roses: Spot[]; blossoms: number; vine: boolean }) {
+  const rnd = prng(seed);
   let back = '';
   let lines = '';
-  // sulur halus di tepi
-  lines += `<path d="M2 0 C20 90 -6 180 14 270 C30 350 0 430 12 520" fill="none" stroke="${C.line}" stroke-opacity=".7" stroke-width="1.3"/>`;
+  if (o.vine) lines += `<path d="M2 0 C26 90 -8 180 18 270 C34 350 0 430 14 520" fill="none" stroke="${C.line}" stroke-opacity=".75" stroke-width="1.4"/>`;
   for (let i = 0; i < 12; i++) {
     const y = 20 + i * 42 + rnd() * 14;
-    const n = 3 + Math.floor(rnd() * 2);
+    const n = o.leafN[i % o.leafN.length];
     for (let k = 0; k < n; k++) {
-      back += leaf(-2, y + (rnd() - 0.5) * 16, 52 + rnd() * 62, 62 + k * 22 + (rnd() - 0.5) * 26, pick(rnd, C.leaf));
+      back += leaf(-2, y + (rnd() - 0.5) * 16, o.leafLen[0] + rnd() * (o.leafLen[1] - o.leafLen[0]), 56 + k * 24 + (rnd() - 0.5) * 26, pick(rnd, C.leaf));
     }
   }
-  const spots: [number, number, number][] = [[6, 50, 40], [10, 196, 44], [4, 350, 42], [12, 470, 36]];
   let blooms = '';
-  spots.forEach(([x, y, r], i) => (blooms += hydrangea(x, y, r, 330 + i, 26 + (i % 2) * 8)));
-  const roses: [number, number, number][] = [[52, 112, 22], [58, 256, 24], [50, 404, 22], [46, 24, 16], [40, 520, 16]];
-  roses.forEach(([x, y, r], i) => (blooms += rose(x, y, r, i * 40)));
-  for (let i = 0; i < 10; i++) blooms += blossom(40 + rnd() * 70, 20 + i * 50 + rnd() * 30, 5 + rnd() * 3, i % 2 === 0);
-  write('side-bloom.svg', svg(170, 540, back + lines + blooms));
+  o.hydr.forEach(([x, y, r], i) => (blooms += hydrangea(x, y, r, seed + i, 26 + (i % 2) * 8)));
+  o.roses.forEach(([x, y, r], i) => (blooms += rose(x, y, r, i * 40)));
+  for (let i = 0; i < o.blossoms; i++) blooms += blossom(36 + rnd() * 80, 20 + i * (500 / o.blossoms) + rnd() * 24, 5 + rnd() * 3, i % 2 === 0);
+  write(name, svg(170, 540, back + lines + blooms));
 }
+// campuran (mawar + hydrangea)
+sideArt('side-bloom.svg', 321, { leafN: [3, 4], leafLen: [52, 114], hydr: [[6, 50, 40], [10, 196, 44], [4, 350, 42], [12, 470, 36]], roses: [[52, 112, 22], [58, 256, 24], [50, 404, 22], [46, 24, 16], [40, 520, 16]], blossoms: 10, vine: true });
+// hydrangea biru lebat
+sideArt('side-hydrangea.svg', 411, { leafN: [2, 3], leafLen: [40, 80], hydr: [[8, 40, 50], [14, 130, 46], [6, 230, 52], [14, 330, 46], [8, 430, 50], [12, 515, 40]], roses: [[62, 180, 14], [60, 380, 14]], blossoms: 14, vine: false });
+// mawar krem dengan daun ramping
+sideArt('side-rose.svg', 511, { leafN: [2, 2, 3], leafLen: [70, 130], hydr: [[4, 300, 30]], roses: [[24, 60, 30], [56, 150, 22], [20, 250, 32], [58, 340, 22], [22, 430, 30], [52, 510, 20]], blossoms: 6, vine: true });
+// ranting daun saja (ringan)
+sideArt('side-leaf.svg', 611, { leafN: [4, 3, 5], leafLen: [60, 140], hydr: [], roses: [[40, 270, 14]], blossoms: 12, vine: true });
 
 // ── 9. Burung layang-layang ──────────────────────────────────────────────────────────────
 write(

@@ -21,6 +21,8 @@ import type { RsvpSummary } from '../composables/useGuest.ts';
 import { readLastRsvp, submissionId, wishesVersion, writeLastRsvp } from '../composables/rsvpStore.ts';
 import BandSection from '../components/BandSection.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
 import Motes from '../components/Motes.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import WishesSection from './WishesSection.vue';
@@ -154,11 +156,19 @@ function edit() {
 
 <template>
   <BandSection id="rsvp" tone="cream" from="paper" labelledby="rsvp-judul">
-    <SideFlower side="left" top="5%" />
-    <SideFlower side="right" top="22%" :delay="200" />
-    <SideFlower side="left" top="46%" :delay="100" />
-    <SideFlower side="right" top="66%" :delay="250" />
-    <SideFlower side="left" top="84%" :delay="150" />
+    <SideFlower side="left" top="5%" variant="bloom" :cycle="14" :phase="0" />
+    <SideFlower side="right" top="22%" variant="rose" :cycle="15" :phase="5" />
+    <SideFlower side="left" top="46%" variant="hydrangea" :cycle="12" :phase="8" />
+    <SideFlower side="right" top="66%" variant="leaf" :cycle="13" :phase="3" />
+    <SideFlower side="left" top="84%" variant="rose" :cycle="16" :phase="10" />
+    <ParallaxBackdrop>
+      <ParallaxLayer :speed="0.32"><div class="absolute -left-16 top-[8%] size-72 rounded-full bg-[#E3D5C6]/70 blur-3xl" /><div class="absolute -right-20 top-[46%] size-80 rounded-full bg-[#CBD5DA]/50 blur-3xl" /><div class="absolute -left-12 top-[78%] size-72 rounded-full bg-[#E3D5C6]/60 blur-3xl" /></ParallaxLayer>
+      <ParallaxLayer :speed="-0.18">
+        <img :src="sparkle" alt="" class="twinkle absolute left-[16%] top-[34%] w-5" />
+        <img :src="sparkle" alt="" class="twinkle absolute right-[12%] top-[56%] w-4" style="animation-delay: -1.1s" />
+        <img :src="sparkle" alt="" class="twinkle absolute left-[20%] top-[78%] w-4" style="animation-delay: -2s" />
+      </ParallaxLayer>
+    </ParallaxBackdrop>
     <Motes :count="12" :seed="13" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[3%] top-[70px] z-10" :size="36" />

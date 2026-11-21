@@ -11,6 +11,8 @@ import { event } from '../../../config/event.ts';
 import type { EtiquetteItem } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
 import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
 import Butterfly from '../components/Butterfly.vue';
@@ -30,14 +32,21 @@ const card = 'relative rounded-[2rem] bg-paper/95 px-6 shadow-[0_14px_44px_rgba(
 
 <template>
   <BandSection id="pemberitahuan" tone="cream" from="paper" labelledby="pemberitahuan-judul">
-    <SideFlower side="left" top="5%" />
-    <SideFlower side="right" top="24%" :delay="200" />
-    <SideFlower side="left" top="50%" :delay="100" />
-    <SideFlower side="right" top="72%" :delay="250" />
+    <SideFlower side="left" top="6%" variant="leaf" :cycle="12" :phase="1" />
+    <SideFlower side="right" top="26%" variant="hydrangea" :cycle="15" :phase="6" />
+    <SideFlower side="left" top="52%" variant="rose" :cycle="13" :phase="10" />
+    <SideFlower side="right" top="74%" variant="leaf" :cycle="11" :phase="3" />
+    <ParallaxBackdrop>
+      
+      <ParallaxLayer :speed="0.2"><div class="absolute -right-20 top-[46%] size-80 rounded-full bg-[#CBD5DA]/50 blur-3xl" /><div class="absolute -left-12 top-[78%] size-72 rounded-full bg-[#E3D5C6]/60 blur-3xl" /></ParallaxLayer>
+      <ParallaxLayer :speed="-0.16">
+        <img :src="sparkle" alt="" class="twinkle absolute right-[22%] top-[26%] w-4" />
+        <img :src="sparkle" alt="" class="twinkle absolute left-[14%] top-[60%] w-5" style="animation-delay: -1.2s" />
+      </ParallaxLayer>
+    </ParallaxBackdrop>
     <Motes :count="12" :seed="11" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Lantern class="left-[4%] top-[70px] z-10" :size="38" />
-    <Lantern class="right-[4%] top-[70px] z-10" :size="40" :delay="-2.2" />
 
     <div class="relative z-[5] mx-auto flex max-w-[380px] flex-col gap-10 px-4 pb-28 pt-[150px] text-center">
       <!-- Pemberitahuan penting -->

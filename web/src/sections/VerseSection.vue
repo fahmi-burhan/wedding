@@ -11,8 +11,10 @@
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
+import crescent from '../assets/scenes/crescent.svg';
 import Motes from '../components/Motes.vue';
-import Lantern from '../components/Lantern.vue';
 import Butterfly from '../components/Butterfly.vue';
 import OrnamentDivider from '../components/OrnamentDivider.vue';
 import quran from '../assets/scenes/quran.svg';
@@ -21,14 +23,22 @@ import sparkle from '../assets/scenes/sparkle.svg';
 
 <template>
   <BandSection id="ayat" tone="cream" from="paper" labelledby="ayat-judul">
-    <SideFlower side="left" top="6%" />
-    <SideFlower side="right" top="28%" :delay="200" />
-    <SideFlower side="left" top="54%" :delay="100" />
-    <SideFlower side="right" top="74%" :delay="250" />
+    <SideFlower side="left" top="6%" variant="rose" :cycle="14" :phase="0" />
+    <SideFlower side="right" top="26%" variant="leaf" :cycle="12" :phase="4" />
+    <SideFlower side="right" top="54%" variant="rose" :cycle="16" :phase="8" />
+    <SideFlower side="left" top="76%" variant="hydrangea" :cycle="13" :phase="2" />
+    <ParallaxBackdrop>
+      <ParallaxLayer :speed="0.34"><div class="absolute -left-16 top-[8%] size-72 rounded-full bg-[#E3D5C6]/70 blur-3xl" /><div class="absolute -right-20 top-[46%] size-80 rounded-full bg-[#CBD5DA]/50 blur-3xl" /></ParallaxLayer>
+      <ParallaxLayer :speed="0.2"><img :src="crescent" alt="" class="absolute -right-6 top-[12%] w-44 opacity-30" /></ParallaxLayer>
+      <ParallaxLayer :speed="-0.16">
+        <img :src="sparkle" alt="" class="twinkle absolute left-[18%] top-[30%] w-5" />
+        <img :src="sparkle" alt="" class="twinkle absolute right-[14%] top-[58%] w-4" style="animation-delay: -1s" />
+        <img :src="sparkle" alt="" class="twinkle absolute left-[24%] top-[80%] w-4" style="animation-delay: -2s" />
+      </ParallaxLayer>
+    </ParallaxBackdrop>
+    <Butterfly class="left-[12%] top-[58%] z-[8]" :size="20" :fx="50" :fy="-60" :duration="12" :delay="-4" />
     <Motes :count="12" :seed="23" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
-    <Lantern class="left-[4%] top-[70px] z-10" :size="40" />
-    <Lantern class="right-[4%] top-[70px] z-10" :size="36" :delay="-1.8" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[30%] top-[150px] z-10 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[28%] top-[140px] z-10 w-3" style="animation-delay: -1.2s" />
 

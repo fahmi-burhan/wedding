@@ -13,6 +13,8 @@ import BandSection from '../components/BandSection.vue';
 import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import sparkle from '../assets/scenes/sparkle.svg';
 import crescent from '../assets/scenes/crescent.svg';
@@ -23,9 +25,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 <template>
   <BandSection id="hitung-mundur" tone="cream" from="paper" labelledby="hitung-judul">
+    <SideFlower side="right" top="10%" variant="hydrangea" :cycle="15" :phase="3" />
+    <SideFlower side="left" top="44%" variant="leaf" :cycle="12" :phase="7" />
+    <ParallaxBackdrop>
+      <ParallaxLayer :speed="0.3"><div class="absolute -left-16 top-[8%] size-72 rounded-full bg-[#E3D5C6]/70 blur-3xl" /><div class="absolute -right-20 top-[46%] size-80 rounded-full bg-[#CBD5DA]/50 blur-3xl" /></ParallaxLayer>
+      <ParallaxLayer :speed="0.18"><img :src="crescent" alt="" class="absolute -left-10 top-[44%] w-52 opacity-25" /></ParallaxLayer>
+      <ParallaxLayer :speed="-0.2">
+        <img :src="sparkle" alt="" class="twinkle absolute right-[20%] top-[40%] w-5" />
+        <img :src="sparkle" alt="" class="twinkle absolute left-[16%] top-[70%] w-4" style="animation-delay: -1.4s" />
+      </ParallaxLayer>
+    </ParallaxBackdrop>
     <Motes :count="12" :seed="5" />
-    <SideFlower side="left" top="8%" />
-    <SideFlower side="right" top="30%" :delay="200" />
     <Lantern class="left-[6%] top-[70px] z-10" :size="38" />
     <Lantern class="right-[6%] top-[70px] z-10" :size="36" :delay="-2" />
     <img :src="crescent" alt="" aria-hidden="true" class="bob pointer-events-none absolute right-[24%] top-[120px] z-[6] w-10" />

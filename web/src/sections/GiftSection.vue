@@ -11,6 +11,8 @@ import { Check, ChevronDown, Copy, Gift } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
 import Motes from '../components/Motes.vue';
 import SectionLabel from '../components/SectionLabel.vue';
 import sparkle from '../assets/scenes/sparkle.svg';
@@ -33,11 +35,17 @@ const spaced = (n: string) => n.replace(/(.{4})/g, '$1 ').trim();
 
 <template>
   <BandSection fade v-if="event.gift" id="gift" tone="paper" from="cream" labelledby="gift-judul">
-    <SideFlower side="left" top="6%" />
-    <SideFlower side="right" top="30%" :delay="200" />
-    <SideFlower side="left" top="58%" :delay="100" />
+    <SideFlower side="left" top="8%" variant="rose" :cycle="13" :phase="2" />
+    <SideFlower side="right" top="34%" variant="hydrangea" :cycle="14" :phase="7" />
+    <SideFlower side="left" top="60%" variant="bloom" :cycle="16" :phase="11" />
+    <ParallaxBackdrop>
+      <ParallaxLayer :speed="0.14"><img :src="backdrop" alt="" class="size-full object-cover" /></ParallaxLayer>
+      <ParallaxLayer :speed="-0.18">
+        <img :src="sparkle" alt="" class="twinkle absolute left-[12%] top-[40%] w-5" />
+        <img :src="sparkle" alt="" class="twinkle absolute right-[12%] top-[62%] w-4" style="animation-delay: -1.5s" />
+      </ParallaxLayer>
+    </ParallaxBackdrop>
     <Motes :count="12" :seed="17" />
-    <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute left-[14%] top-[34%] z-10 w-4" />
     <img :src="sparkle" alt="" aria-hidden="true" class="twinkle pointer-events-none absolute right-[16%] top-[44%] z-10 w-3" style="animation-delay: -1.2s" />
 

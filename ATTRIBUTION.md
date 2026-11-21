@@ -21,7 +21,7 @@ Semua aset pihak ketiga yang dipakai undangan ini, beserta sumber dan lisensinya
 |---|---|---|
 | `web/src/assets/ornaments/*.svg` (buket hydrangea & mawar, pita bunga atas, untaian sisi, latar cat air, sulur, ranting, bayangan daun, kelopak) dan `web/public/favicon.svg` | Digambar prosedural oleh `scripts/generate-ornaments.ts` khusus untuk proyek ini | Milik proyek |
 | Kupu-kupu (`web/src/components/Butterfly.vue`) | Digambar langsung sebagai SVG untuk proyek ini | Milik proyek |
-| `web/src/assets/scenes/*.svg` (cincin emas + karangan bunga, rangkaian bunga tepi, masjid, lampion, bulan sabit, bintang, mushaf, burung, hamparan bunga, ubin pita motif) | Digambar prosedural oleh `scripts/generate-scenes.ts` khusus untuk proyek ini | Milik proyek |
+| `web/src/assets/scenes/*.svg` (cincin emas + karangan bunga, 4 corak rangkaian bunga tepi, masjid, lampion, bulan sabit, bintang, mushaf, burung, hamparan bunga, ubin pita motif) | Digambar prosedural oleh `scripts/generate-scenes.ts` khusus untuk proyek ini | Milik proyek |
 | `web/public/og-image.jpg` | Dibuat oleh `scripts/og-image.ts` dari ornamen di atas + teks dari `config/event.ts` | Milik proyek |
 | Tekstur kertas | Noise SVG `feTurbulence` di `web/src/styles/main.css` | Milik proyek |
 

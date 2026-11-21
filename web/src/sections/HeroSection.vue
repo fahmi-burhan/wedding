@@ -10,6 +10,8 @@ import { ChevronDown } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import BandSection from '../components/BandSection.vue';
 import SideFlower from '../components/SideFlower.vue';
+import ParallaxBackdrop from '../components/ParallaxBackdrop.vue';
+import ParallaxLayer from '../components/ParallaxLayer.vue';
 import Birds from '../components/Birds.vue';
 import Butterfly from '../components/Butterfly.vue';
 import Lantern from '../components/Lantern.vue';
@@ -25,11 +27,14 @@ import sparkle from '../assets/scenes/sparkle.svg';
 
 <template>
   <BandSection fade id="beranda" tone="paper" full labelledby="beranda-nama">
-    <SideFlower side="left" top="14%" />
-    <SideFlower side="right" top="34%" :delay="200" />
-    <SideFlower side="left" top="58%" :delay="100" />
-    <img :src="backdrop" alt="" aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 size-full object-cover" />
-    <img :src="mosque" alt="" aria-hidden="true" class="parallax-slow pointer-events-none absolute inset-x-0 bottom-[110px] -z-[5] w-full opacity-80" />
+    <SideFlower side="left" top="14%" variant="hydrangea" :cycle="13" :phase="0" />
+    <SideFlower side="right" top="38%" variant="hydrangea" :cycle="16" :phase="6" />
+    <SideFlower side="left" top="62%" variant="leaf" :cycle="11" :phase="3" />
+    <SideFlower side="right" top="80%" variant="rose" :cycle="15" :phase="9" />
+    <ParallaxBackdrop>
+      <ParallaxLayer :speed="0.12"><img :src="backdrop" alt="" class="size-full object-cover" /></ParallaxLayer>
+      <ParallaxLayer :speed="0.3"><img :src="mosque" alt="" class="absolute inset-x-0 bottom-[14%] w-full opacity-80" /></ParallaxLayer>
+    </ParallaxBackdrop>
 
     <Birds />
     <Motes :count="18" :seed="7" />

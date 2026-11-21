@@ -4,13 +4,12 @@
   latarnya berbeda dari bagian mempelai. Akad Nikah dan Walimah satu kartu lengkung (tempatnya sama);
   di bawahnya kartu pengisi tausiyah.
   Dipanggil oleh: App.vue.
-  Memanggil: config/event.ts (sessions, venue, speakers), shared/date.ts, calendar.ts, ParallaxLayer, SideFlower.
+  Memanggil: config/event.ts (sessions, venue, speakers), shared/date.ts, ParallaxLayer, SideFlower.
 -->
 <script setup lang="ts">
-import { CalendarPlus, MapPin } from 'lucide-vue-next';
+import { MapPin } from 'lucide-vue-next';
 import { event } from '../../../config/event.ts';
 import { formatTime, partsInZone } from '../../../shared/date.ts';
-import { googleCalendarUrl } from '../composables/calendar.ts';
 import BandSection from '../components/BandSection.vue';
 import Motes from '../components/Motes.vue';
 import Lantern from '../components/Lantern.vue';
@@ -29,12 +28,16 @@ const date = partsInZone(event.sessions[0].start, event.timezone);
 const sessions = event.sessions.map((s) => {
   const start = formatTime(s.start, event.timezone, event.timezoneLabel).replace(` ${event.timezoneLabel}`, '');
   const end = formatTime(s.end, event.timezone, event.timezoneLabel);
-  return { ...s, range: `${start} - ${end}`, calendar: googleCalendarUrl(s) };
+  return { ...s, range: `${start} - ${end}` };
 });
 </script>
 
 <template>
   <BandSection id="acara" tone="paper" from="cream" fade labelledby="acara-judul">
+    <SideFlower side="left" top="5%" variant="rose" :cycle="14" :phase="0" />
+    <SideFlower side="right" top="22%" variant="leaf" :cycle="13" :phase="5" />
+    <SideFlower side="left" top="48%" variant="hydrangea" :cycle="16" :phase="9" />
+    <SideFlower side="right" top="68%" variant="rose" :cycle="12" :phase="2" />
     <!-- Latar paralaks berlapis: jauh (kabut warna) → tengah (masjid) → dekat (bulan sabit & bintang, lebih cepat dari isi) -->
     <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,#FFFFFF_0%,#F8F7F4_55%,#EFE7DD_100%)]" />
@@ -57,10 +60,6 @@ const sessions = event.sessions.map((s) => {
     </div>
 
     <Motes :count="14" :seed="19" />
-    <SideFlower side="left" top="5%" />
-    <SideFlower side="right" top="22%" :delay="200" />
-    <SideFlower side="left" top="48%" :delay="100" />
-    <SideFlower side="right" top="68%" :delay="250" />
     <Butterfly class="right-[12%] top-[230px] z-[8]" :size="22" :fx="-50" :fy="-50" :duration="13" />
     <Butterfly class="left-[12%] top-[62%] z-[8]" :size="20" :fx="50" :fy="-60" :duration="12" :delay="-4" />
     <Lantern class="left-[6%] top-[70px] z-10" :size="38" :delay="-1" />
@@ -94,15 +93,6 @@ const sessions = event.sessions.map((s) => {
               <h3 :id="`sesi-${s.key}`" v-reveal:mask="300 + i * 150" class="font-display text-[1.7rem] font-bold uppercase leading-tight tracking-wide text-ink">{{ s.label }}</h3>
               <p v-reveal="400 + i * 150" class="mt-1 text-sm text-ink-soft">Pukul</p>
               <p v-reveal="450 + i * 150" class="font-bold text-ink">{{ s.range }}</p>
-              <a
-                v-reveal="500 + i * 150"
-                :href="s.calendar"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-1 inline-flex items-center gap-1 text-xs font-bold text-ink-soft underline decoration-line underline-offset-4 hover:text-ink"
-              >
-                <CalendarPlus class="size-3.5" aria-hidden="true" /> Tambah ke kalender
-              </a>
             </article>
           </div>
 

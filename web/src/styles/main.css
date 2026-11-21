@@ -274,6 +274,9 @@
 }
 
 /* Hiasan bunga yang menggantung dari tepi atas berayun pelan (poros di tepi atas). */
+/* Bunga tepi: muncul dari samping → bertahan → sembunyi ke samping (berulang). */
+@keyframes peek-l { 0%, 10% { transform: translateX(-118%); } 30%, 68% { transform: translateX(0); } 90%, 100% { transform: translateX(-118%); } }
+@keyframes peek-r { 0%, 10% { transform: translateX(118%); } 30%, 68% { transform: translateX(0); } 90%, 100% { transform: translateX(118%); } }
 /* Goyangan untaian bunga samping (poros di tepi layar). */
 .side-sway { animation: side-sway 6.5s ease-in-out infinite alternate; will-change: transform; }
 @keyframes side-sway { from { transform: rotate(-2.2deg); } to { transform: rotate(2.6deg) translateY(6px); } }

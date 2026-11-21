@@ -26,6 +26,10 @@ const people = [groom, bride];
 
 <template>
   <BandSection id="mempelai" tone="paper" from="cream" fade labelledby="mempelai-judul">
+    <SideFlower side="left" top="6%" variant="bloom" :cycle="14" :phase="0" />
+    <SideFlower side="right" top="26%" variant="hydrangea" :cycle="15" :phase="6" />
+    <SideFlower side="left" top="50%" variant="rose" :cycle="13" :phase="9" />
+    <SideFlower side="right" top="72%" variant="leaf" :cycle="12" :phase="3" />
     <!-- Latar diam: tetap di layar selama kapsul bergulir -->
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div class="sticky top-0 h-svh w-full overflow-hidden">
@@ -38,10 +42,6 @@ const people = [groom, bride];
         <img :src="sparkle" alt="" class="twinkle absolute right-[10%] top-[72%] w-5" style="animation-delay: -0.6s" />
       </div>
     </div>
-    <SideFlower side="left" top="6%" />
-    <SideFlower side="right" top="26%" :delay="200" />
-    <SideFlower side="left" top="50%" :delay="100" />
-    <SideFlower side="right" top="72%" :delay="250" />
 
     <div class="relative z-[5] mx-auto max-w-[380px] px-3 pb-24 pt-[120px] text-center">
       <h2 id="mempelai-judul" class="sr-only">Kedua Mempelai</h2>
